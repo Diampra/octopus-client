@@ -108,7 +108,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="">
+    <div className="py-8">
         <AdminHeader />
       <div className="flex items-center gap-4 mb-6">
         <Button variant="outline" asChild>

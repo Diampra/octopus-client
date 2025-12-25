@@ -98,7 +98,7 @@ export default function AdminPortfolioCategories() {
   };
 
   return (
-    <div className="">
+    <div className="py-8">
         <AdminHeader />
       <h1 className="text-2xl font-bold mb-6">Portfolio Categories</h1>
 

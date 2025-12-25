@@ -98,7 +98,7 @@ const AdminPosts = () => {
   // Delete post
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`${apiUrl}/api/admin/blog/${id}`, {
+      const res = await fetch(`${apiUrl}/admin/blog/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

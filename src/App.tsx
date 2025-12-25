@@ -27,6 +27,7 @@ import AdminServiceForm from "./pages/AdminServiceForm";
 import AdminServiceList from "./pages/AdminServiceList";
 import AdminTestimonialsList from "./pages/AdminTestimonialsList";
 import AdminTestimonialForm from "./pages/AdminTestimonialForm";
+import AdminStorageAudit from "./pages/AdminStorageAudit";
 
 
 const queryClient = new QueryClient();
@@ -55,19 +56,21 @@ const App = () => (
             </AdminRoute>
           }
         >
-        <Route index element={<AdminDashboard />} />
-        <Route path="posts" element={<AdminPosts />} />
-        <Route path="posts/:id" element={<AdminPostForm />} />
-        <Route path="categories" element={<AdminCategories />} />
-        <Route path="portfolio" element={<AdminPortfolio />} />
-        <Route path="portfolio/new" element={<AdminPortfolioForm />} />
-        <Route path="portfolio/:id" element={<AdminPortfolioForm />} />
-        <Route path="portfolio/categories" element={<AdminPortfolioCategories />} />
-        <Route path="services" element={<AdminServiceList />} />
-        <Route path="services/new" element={<AdminServiceForm />} />
-        <Route path="services/:id" element={<AdminServiceForm />} />
-        <Route path="testimonials" element={<AdminTestimonialsList />} />
-        <Route path="testimonials/:id" element={<AdminTestimonialForm />} />
+          <Route index element={<AdminDashboard />} />
+          <Route path="posts" element={<AdminPosts />} />
+          <Route path="posts/:id" element={<AdminPostForm />} />
+          <Route path="categories" element={<AdminCategories />} />
+          <Route path="portfolio" element={<AdminPortfolio />} />
+          <Route path="portfolio/new" element={<AdminPortfolioForm />} />
+          <Route path="portfolio/:id" element={<AdminPortfolioForm />} />
+          <Route path="portfolio/categories" element={<AdminPortfolioCategories />} />
+          <Route path="services" element={<AdminServiceList />} />
+          <Route path="services/new" element={<AdminServiceForm />} />
+          <Route path="services/:id" element={<AdminServiceForm />} />
+          <Route path="testimonials" element={<AdminTestimonialsList />} />
+          <Route path="testimonials/:id" element={<AdminTestimonialForm />} />
+
+          <Route path="storage" element={<AdminStorageAudit />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

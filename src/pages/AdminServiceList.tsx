@@ -79,7 +79,7 @@ export default function AdminServiceList() {
   };
 
   return (
-    <div className="">
+    <div className="py-8">
       {/* HEADER */}
       <AdminHeader />
       <div className="flex items-center justify-between mb-6">

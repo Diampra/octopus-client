@@ -33,7 +33,7 @@ export default function AdminPortfolio() {
   const deleteItem = async (id: string) => {
     if (!confirm("Delete this portfolio item?")) return;
 
-    const res = await fetch(`${apiUrl}/portfolio/${id}`, {
+    const res = await fetch(`${apiUrl}/admin/portfolio/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -47,7 +47,7 @@ export default function AdminPortfolio() {
   return (
     <div>
       <AdminHeader />
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 py-8">
         <h1 className="text-2xl font-bold">Portfolio</h1>
         <Button asChild>
           <Link to="/admin/portfolio/new">

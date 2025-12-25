@@ -94,19 +94,19 @@ const BlogPostPage = () => {
         {/* HERO */}
         <section className="bg-primary text-primary-foreground py-12 md:py-20 border-b-4 border-foreground">
           <div className="container mx-auto px-4">
-<div className="flex flex-wrap items-center gap-4 mb-8">
-  <Link
-    to="/blog"
-    className="inline-flex items-center gap-2 opacity-80 hover:opacity-100"
-  >
-    <ArrowLeft className="w-4 h-4" />
-    Back to Blog
-  </Link>
-
-  <span className="inline-block px-3 py-1 text-xs font-bold uppercase border-2 border-foreground bg-background text-foreground">
-    {post.category.name}
-  </span>
-</div>
+            <div className="flex flex-wrap items-center gap-4 mb-8">
+              <Link
+                to="/blog"
+                className="inline-flex items-center gap-2 opacity-80 hover:opacity-100"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Blog
+              </Link>
+              
+              <span className="inline-block px-3 py-1 text-xs font-bold uppercase border-2 border-foreground bg-background text-foreground">
+                {post.category.name}
+              </span>
+            </div>
 
 
             <h1 className="text-3xl md:text-5xl font-bold max-w-4xl mb-6">

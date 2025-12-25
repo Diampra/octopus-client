@@ -56,7 +56,7 @@ const Portfolio = () => {
       <main className="pt-16 md:pt-20">
         {/* HERO */}
         <section className="bg-foreground text-background py-16 md:py-24">
-          <div className="container mx-auto px-4 max-w-3xl">
+          <div className="container mx-auto px-4">
             <span className="inline-block bg-primary text-primary-foreground px-4 py-2 text-sm font-bold uppercase border-2 border-background mb-4">
               Portfolio
             </span>

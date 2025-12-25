@@ -8,6 +8,7 @@ import {
   Menu,
   X,
   Image,
+  HardDrive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,7 +21,7 @@ const nav = [
   { label: "Portfolio Categories", to: "/admin/portfolio/categories", icon: Tags },
   { label: "Services", to: "/admin/services", icon: FileText },
   { label: "Testimonials", to: "/admin/testimonials", icon: FileText },
-  
+  { label: "Storage Audit", to: "/admin/storage", icon: HardDrive }
 ];
 
 export default function AdminLayout() {
