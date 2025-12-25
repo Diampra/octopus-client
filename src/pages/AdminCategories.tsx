@@ -39,7 +39,7 @@ const AdminCategories = () => {
   return (
     <div className="space-y-6">
       <AdminHeader />
-      <h1 className="text-2xl font-bold">Manage Categories</h1>
+      <h1 className="text-2xl font-bold pt-4">Manage Categories</h1>
 
       <div className="flex gap-2">
         <Input

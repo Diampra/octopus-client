@@ -6,6 +6,17 @@ import { Switch } from "@/components/ui/switch";
 import { apiUrl } from "@/constants/constants";
 import { useToast } from "@/hooks/use-toast";
 import AdminHeader from "@/layouts/AdminHeader";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Testimonial = {
   id: string;
@@ -44,20 +55,35 @@ export default function AdminTestimonialsList() {
     fetchItems();
   };
 
-  const remove = async (id: string) => {
-    if (!confirm("Delete testimonial?")) return;
-    await fetch(`${apiUrl}/admin/testimonials/${id}`, {
+const remove = async (id: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/admin/testimonials/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
-    toast({ title: "Deleted", description: "Testimonial removed" });
+
+    if (!res.ok) throw new Error();
+
+    toast({
+      title: "Deleted",
+      description: "Testimonial removed successfully.",
+    });
+
     fetchItems();
-  };
+  } catch {
+    toast({
+      title: "Error",
+      description: "Failed to delete testimonial.",
+      variant: "destructive",
+    });
+  }
+};
+
 
   return (
     <div>
         <AdminHeader />
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 pt-8">
         <h1 className="text-2xl font-bold">Testimonials</h1>
         <Button asChild>
           <Link to="/admin/testimonials/new">
@@ -115,9 +141,32 @@ export default function AdminTestimonialsList() {
                     <Edit className="w-4 h-4" />
                   </Link>
                 </Button>
-                <Button size="sm" variant="destructive" onClick={() => remove(t.id)}>
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+<AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button size="sm" variant="destructive">
+      <Trash2 className="w-4 h-4" />
+    </Button>
+  </AlertDialogTrigger>
+
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>
+        Delete Testimonial?
+      </AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction onClick={() => remove(t.id)}>
+        Delete
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
               </div>
             </div>
           </div>

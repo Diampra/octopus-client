@@ -98,9 +98,9 @@ export default function AdminPortfolioCategories() {
   };
 
   return (
-    <div className="py-8">
+    <div className="">
         <AdminHeader />
-      <h1 className="text-2xl font-bold mb-6">Portfolio Categories</h1>
+      <h1 className="text-2xl font-bold mb-6 pt-8">Portfolio Categories</h1>
 
       {/* ADD FORM */}
       <div className="border-2 border-foreground p-4 mb-8">

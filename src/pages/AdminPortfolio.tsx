@@ -5,6 +5,17 @@ import { Button } from "@/components/ui/button";
 import { apiUrl } from "@/constants/constants";
 import { useToast } from "@/hooks/use-toast";
 import AdminHeader from "@/layouts/AdminHeader";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type PortfolioItem = {
   id: string;
@@ -30,19 +41,30 @@ export default function AdminPortfolio() {
     fetchItems();
   }, []);
 
-  const deleteItem = async (id: string) => {
-    if (!confirm("Delete this portfolio item?")) return;
-
+const deleteItem = async (id: string) => {
+  try {
     const res = await fetch(`${apiUrl}/admin/portfolio/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
 
-    if (res.ok) {
-      toast({ title: "Deleted", description: "Item removed" });
-      fetchItems();
-    }
-  };
+    if (!res.ok) throw new Error();
+
+    toast({
+      title: "Deleted",
+      description: "Portfolio item removed successfully.",
+    });
+
+    fetchItems();
+  } catch {
+    toast({
+      title: "Error",
+      description: "Failed to delete portfolio item.",
+      variant: "destructive",
+    });
+  }
+};
+
 
   return (
     <div>
@@ -80,13 +102,32 @@ export default function AdminPortfolio() {
               </Link>
             </Button>
 
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => deleteItem(item.id)}
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
+<AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button size="sm" variant="destructive">
+      <Trash2 className="w-4 h-4" />
+    </Button>
+  </AlertDialogTrigger>
+
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>
+        Delete Portfolio Item?
+      </AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction onClick={() => deleteItem(item.id)}>
+        Delete
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
           </div>
         ))}
       </div>

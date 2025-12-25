@@ -11,6 +11,17 @@ import { Button } from "@/components/ui/button";
 import { apiUrl } from "@/constants/constants";
 import { useToast } from "@/hooks/use-toast";
 import AdminHeader from "@/layouts/AdminHeader";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Service = {
   id: string;
@@ -62,28 +73,37 @@ export default function AdminServiceList() {
     fetchServices();
   };
 
-  const deleteService = async (id: string) => {
-    if (!confirm("Delete this service?")) return;
-
-    await fetch(`${apiUrl}/admin/services/${id}`, {
+const deleteService = async (id: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/admin/services/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
 
+    if (!res.ok) throw new Error();
+
     toast({
       title: "Deleted",
-      description: "Service removed",
+      description: "Service removed successfully.",
     });
 
     fetchServices();
-  };
+  } catch {
+    toast({
+      title: "Error",
+      description: "Failed to delete service.",
+      variant: "destructive",
+    });
+  }
+};
+
 
   return (
-    <div className="py-8">
+    <div className="">
       {/* HEADER */}
       <AdminHeader />
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Services</h1>
+        <h1 className="text-2xl font-bold pt-8">Services</h1>
 
         <Button asChild>
           <Link to="/admin/services/new">
@@ -147,13 +167,32 @@ export default function AdminServiceList() {
                   </Link>
                 </Button>
 
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => deleteService(s.id)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+<AlertDialog>
+  <AlertDialogTrigger asChild>
+    <Button size="sm" variant="destructive">
+      <Trash2 className="w-4 h-4" />
+    </Button>
+  </AlertDialogTrigger>
+
+  <AlertDialogContent>
+    <AlertDialogHeader>
+      <AlertDialogTitle>
+        Delete Service?
+      </AlertDialogTitle>
+      <AlertDialogDescription>
+        This action cannot be undone.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+
+    <AlertDialogFooter>
+      <AlertDialogCancel>Cancel</AlertDialogCancel>
+      <AlertDialogAction onClick={() => deleteService(s.id)}>
+        Delete
+      </AlertDialogAction>
+    </AlertDialogFooter>
+  </AlertDialogContent>
+</AlertDialog>
+
               </div>
             </div>
           ))
