@@ -134,7 +134,7 @@ export default function AdminStorageAudit() {
                   <img
                     src={imgUrl}
                     alt=""
-                    className="w-20 h-20 object-cover border-2 border-gray-300 rounded-lg bg-white shadow-sm"
+                    className="w-20 h-20 object-cover border-2 border-gray-300 rounded-lg bg-white shadow-md"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = "none";
                     }}
@@ -200,40 +200,40 @@ export default function AdminStorageAudit() {
 
         {/* SUMMARY CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm border-2 border-green-200 p-6">
+          <div className="bg-white rounded-lg shadow-md border-2 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Linked Files</p>
-                <p className="text-3xl font-bold text-green-600">{data.summary.linked}</p>
+                <p className="text-3xl font-bold">{data.summary.linked}</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
                 <span className="text-2xl">✓</span>
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-2">Files properly referenced in database</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border-2 border-red-200 p-6">
+          <div className="bg-white rounded-lg shadow-md border-2 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Orphan Files</p>
-                <p className="text-3xl font-bold text-red-600">{data.summary.orphan}</p>
+                <p className="text-3xl font-bold">{data.summary.orphan}</p>
               </div>
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                <Trash2 className="w-6 h-6 text-red-600" />
+                <Trash2 className="w-6 h-6" />
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-2">Files not linked, safe to delete</p>
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm border-2 border-yellow-200 p-6">
+          <div className="bg-white rounded-lg shadow-md border-2 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">Missing Files</p>
-                <p className="text-3xl font-bold text-yellow-600">{data.summary.missing}</p>
+                <p className="text-3xl font-bold">{data.summary.missing}</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                <FileQuestion className="w-6 h-6 text-yellow-600" />
+              <div className="w-12 h-12 rounded-full flex items-center justify-center">
+                <FileQuestion className="w-6 h-6 " />
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-2">Referenced but not in storage</p>
@@ -241,9 +241,9 @@ export default function AdminStorageAudit() {
         </div>
 
         {/* LINKED SECTION */}
-        <section className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <section className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
               <span className="text-xl">✓</span>
             </div>
             <div>
@@ -255,7 +255,7 @@ export default function AdminStorageAudit() {
         </section>
 
         {/* ORPHAN SECTION */}
-        <section className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <section className="bg-white rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
@@ -289,7 +289,7 @@ export default function AdminStorageAudit() {
             )}
           </div>
           
-          {render(data.orphan, "bg-red-50 border-red-300", true)}
+          {render(data.orphan, "bg-red-50", true)}
 
           {selected.length > 0 && (
             <div className="mt-6 pt-6 border-t border-gray-200">
@@ -326,7 +326,7 @@ export default function AdminStorageAudit() {
         {/* MISSING SECTION */}
         <section className="bg-white rounded-lg shadow-sm p-6">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10  rounded-lg flex items-center justify-center">
               <FileQuestion className="w-5 h-5 text-yellow-600" />
             </div>
             <div>

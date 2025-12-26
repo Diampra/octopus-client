@@ -22,13 +22,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            {/* <div className="w-10 h-10 bg-primary border-2 border-foreground flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">O</span>
-            </div> */}
-            {/* <span className="font-bold text-xl tracking-tight">Octopus Inc.</span> */}
             <img src="/logo-transparent.png" alt="Octopus Inc." className="h-14 md:h-20" />
-            {/* <AnimatedOctopusLines /> */}
-            {/* <AnimatedOctopusLogo /> */}
           </Link>
 
           {/* Desktop Navigation */}
@@ -37,7 +31,7 @@ const Header = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-4 py-2 font-medium uppercase text-sm tracking-wider transition-colors hover:bg-accent ${
+                className={`px-4 py-2 font-medium uppercase text-sm tracking-wider transition-colors hover:bg-accent hover:text-black ${
                   location.pathname === link.path ? "bg-primary text-primary-foreground" : ""
                 }`}
               >

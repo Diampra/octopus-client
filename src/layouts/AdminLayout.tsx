@@ -15,14 +15,36 @@ import { useAuth } from "@/hooks/useAuth";
 
 const nav = [
   { label: "Dashboard", to: "/admin", icon: LayoutDashboard },
+
   { label: "Posts", to: "/admin/posts", icon: FileText },
-  { label: "Posts Categories", to: "/admin/categories", icon: Tags },
+  {
+    label: "Categories",
+    to: "/admin/categories",
+    icon: Tags,
+    parent: "/admin/posts",
+    isChild: true,
+  },
+
   { label: "Portfolio", to: "/admin/portfolio", icon: Image },
-  { label: "Portfolio Categories", to: "/admin/portfolio/categories", icon: Tags },
+  {
+    label: "Categories",
+    to: "/admin/portfolio/categories",
+    icon: Tags,
+    parent: "/admin/portfolio",
+    isChild: true,
+  },
+
   { label: "Services", to: "/admin/services", icon: FileText },
   { label: "Testimonials", to: "/admin/testimonials", icon: FileText },
-  { label: "Storage Audit", to: "/admin/storage", icon: HardDrive }
+  { label: "Storage Audit", to: "/admin/storage", icon: HardDrive },
+  // { label: "Media Gallery", to: "/admin/media-gallery", icon: Image },
 ];
+const ChildArrow = () => (
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m16.49 12 3.75 3.75m0 0-3.75 3.75m3.75-3.75H3.74V4.499" />
+</svg>
+
+);
 
 export default function AdminLayout() {
   const { pathname } = useLocation();
@@ -37,7 +59,7 @@ export default function AdminLayout() {
 
 const NavLinks = () => (
   <>
-    {nav.map(({ label, to, icon: Icon }) => {
+    {nav.map(({ label, to, icon: Icon, isChild }) => {
       const isActive =
         pathname === to ||
         (pathname.startsWith(to + "/") &&
@@ -51,20 +73,27 @@ const NavLinks = () => (
           key={to}
           to={to}
           onClick={() => setIsMenuOpen(false)}
-          className={`flex items-center gap-2 px-3 py-2 border-2 border-foreground
+          className={`
+            flex items-center gap-2 px-3 py-2 border-2 border-foreground
+            transition
+            ${isChild ? "ml-6 w-[85%]" : "w-full"}
             ${
               isActive
                 ? "bg-primary text-primary-foreground"
                 : "hover:bg-accent"
-            }`}
+            }
+          `}
         >
+          {isChild && <ChildArrow />}
+
           <Icon className="w-4 h-4" />
-          {label}
+          <span className="text-sm">{label}</span>
         </Link>
       );
     })}
   </>
 );
+
 
 
   return (

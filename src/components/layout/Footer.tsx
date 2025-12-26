@@ -75,11 +75,11 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <span className="text-background/80">Patna, Bihar, India</span>
+                <span className="text-background/80">B61, First Floor, Mauryalok Shopping Complex, Budh Marg, Patna. (Bihar) India.</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-primary flex-shrink-0" />
-                <a href="tel:+919876543210" className="text-background/80 hover:text-primary transition-colors">+91 98765 43210</a>
+                <a href="tel:+918092207196" className="text-background/80 hover:text-primary transition-colors">+91 80922 07196</a>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-primary flex-shrink-0" />
@@ -89,12 +89,26 @@ const Footer = () => {
           </div>
         </div>
 
+
         {/* Bottom Bar */}
-        <div className="border-t-2 border-background/20 mt-12 pt-8 text-center">
-          <p className="text-background/60">
-            © {new Date().getFullYear()} Octopus Inc. All rights reserved. | Printing & Branding Excellence
-          </p>
-        </div>
+        <div className="border-t-2 border-background/20 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-background/60">
+              © {new Date().getFullYear()} Octopus Inc. All rights reserved.
+            </p>
+            <div className="flex gap-6">
+              <Link to="/privacy-policy" className="text-background/60 hover:text-primary transition-colors text-sm">
+                Privacy Policy
+              </Link>
+              <Link to="/terms-of-service" className="text-background/60 hover:text-primary transition-colors text-sm">
+                Terms of Service
+              </Link>
+              <Link to="/dmca" className="text-background/60 hover:text-primary transition-colors text-sm">
+                DMCA
+              </Link>
+            </div>
+          </div>
+          </div>
       </div>
     </footer>
   );

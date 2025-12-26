@@ -28,6 +28,10 @@ import AdminServiceList from "./pages/AdminServiceList";
 import AdminTestimonialsList from "./pages/AdminTestimonialsList";
 import AdminTestimonialForm from "./pages/AdminTestimonialForm";
 import AdminStorageAudit from "./pages/AdminStorageAudit";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import DMCA from "./pages/DMCA";
+import AdminMediaGallery from "./pages/media/AdminMediaGallery";
 
 
 const queryClient = new QueryClient();
@@ -71,8 +75,11 @@ const App = () => (
           <Route path="testimonials/:id" element={<AdminTestimonialForm />} />
 
           <Route path="storage" element={<AdminStorageAudit />} />
+          {/* <Route path="media-gallery" element={<AdminMediaGallery />} /> */}
         </Route>
-
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/dmca" element={<DMCA />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

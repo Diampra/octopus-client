@@ -30,7 +30,7 @@ export default function AdminDashboard() {
     value: number | string;
     sub?: string;
   }) => (
-    <div className="border-2 border-foreground p-6">
+    <div className="border-2 border-foreground  shadow-sm p-6">
       <p className="text-sm text-muted-foreground">{label}</p>
       <p className="text-3xl font-bold">{value}</p>
       {sub && <p className="text-xs text-muted-foreground mt-1">{sub}</p>}

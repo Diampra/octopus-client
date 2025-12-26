@@ -12,12 +12,12 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Visit Us",
-    details: ["Patna, Bihar, India", "400001"],
+    details: ["B61, First Floor, Mauryalok Shopping Complex, Budh Marg, Patna. (Bihar) India.", "800001"],
   },
   {
     icon: Phone,
     title: "Call Us",
-    details: ["+91 98765 43210", "+91 12345 67890"],
+    details: ["+91 8092207196", "+91 9312699450"],
   },
   {
     icon: Mail,
@@ -63,7 +63,7 @@ const Contact = () => {
     setIsSubmitting(false);
   };
 
-  const whatsappNumber = "919876543210";
+  const whatsappNumber = "919312699450";
   const whatsappMessage = encodeURIComponent("Hi! I'm interested in your printing services. Can you help me with a quote?");
 
   return (
@@ -223,18 +223,22 @@ const Contact = () => {
                     </a>
                   </Button>
                 </div>
-
-                {/* Map Placeholder */}
-                <div className="mt-8 border-2 border-foreground shadow-sm overflow-hidden">
-                  <div className="aspect-video bg-accent flex items-center justify-center">
-                    <div className="text-center p-8">
-                      <MapPin className="w-12 h-12 mx-auto mb-4 text-primary" />
-                      <p className="text-muted-foreground">
-                        Patna, Bihar, India
-                      </p>
-                    </div>
+                                
+                {/* Google Map */}
+                <div className="mt-8 border-2 border-foreground shadow-sm overflow-hidden rounded-lg">
+                  <div className="aspect-video">
+                    <iframe
+                      title="Octopus Inc Patna Location"
+                      src="https://www.google.com/maps?q=Octopus+Inc,+Patna,+Bihar&z=15&output=embed"
+                      className="w-full h-full"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      allowFullScreen
+                    />
                   </div>
                 </div>
+
               </div>
             </div>
           </div>

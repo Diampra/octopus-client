@@ -5,14 +5,14 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 export default function AdminHeader() {
-      const { user, isAdmin, loading, signOut } = useAuth();
-      const navigate = useNavigate();
-     const handleLogout = async () => {
+  const { user, isAdmin, loading, signOut } = useAuth();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
     await signOut();
     navigate("/");
   };
   return (
-<header className="border-b-2 border-foreground bg-card">
+      <header className="border-b-2 border-foreground bg-card">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
 
           {/* <div className="flex items-center gap-2"> */}
