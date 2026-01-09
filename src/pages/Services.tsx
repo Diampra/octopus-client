@@ -81,10 +81,29 @@ export default function Services() {
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4 space-y-16 md:space-y-24">
             {loading && (
-              <p className="text-center text-muted-foreground">
-                Loading services…
-              </p>
+              <div className="space-y-16 md:space-y-24">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center animate-pulse"
+                  >
+                    <div>
+                      <div className="w-14 h-14 bg-muted mb-4" />
+                      <div className="h-8 bg-muted w-2/3 mb-4" />
+                      <div className="h-4 bg-muted w-full mb-2" />
+                      <div className="h-4 bg-muted w-5/6 mb-6" />
+                      <div className="grid grid-cols-2 gap-3">
+                        {Array.from({ length: 4 }).map((_, j) => (
+                          <div key={j} className="h-8 bg-muted" />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="h-[250px] bg-muted" />
+                  </div>
+                ))}
+              </div>
             )}
+
 
             {services.map((service, index) => {
               const Icon = iconMap[service.icon] ?? Layers;
@@ -135,6 +154,8 @@ export default function Services() {
                       <img
                         src={service.imageUrl}
                         alt={service.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full aspect-[4/3] object-cover"
                       />
                     </div>

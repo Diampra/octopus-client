@@ -32,6 +32,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DMCA from "./pages/DMCA";
 import AdminMediaGallery from "./pages/media/AdminMediaGallery";
+import ScrollToTop from "./components/ScrollToTop";
 
 
 const queryClient = new QueryClient();
@@ -42,7 +43,7 @@ const App = () => (
       <Toaster />
       <Sonner />
 
-
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/services" element={<Services />} />

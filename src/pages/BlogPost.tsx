@@ -30,6 +30,57 @@ type BlogPost = {
     name: string;
   };
 };
+const BlogPostSkeleton = () => {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="pt-20 md:pt-24">
+        {/* HERO SKELETON */}
+        <section className="bg-primary text-primary-foreground py-12 md:py-20 border-b-4 border-foreground">
+          <div className="container mx-auto px-4 animate-pulse">
+            <div className="h-4 w-32 bg-primary-foreground/30 mb-6" />
+            <div className="h-10 md:h-14 w-3/4 bg-primary-foreground/30 mb-6" />
+            <div className="flex gap-6">
+              <div className="h-4 w-24 bg-primary-foreground/30" />
+              <div className="h-4 w-24 bg-primary-foreground/30" />
+              <div className="h-4 w-24 bg-primary-foreground/30" />
+            </div>
+          </div>
+        </section>
+
+        {/* CONTENT SKELETON */}
+        <section className="py-12 md:py-16">
+          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-10">
+            {/* MAIN */}
+            <article className="lg:col-span-8 border-l-4 border-foreground pl-6 animate-pulse">
+              {/* Image */}
+              <div className="w-full aspect-video bg-muted mb-10 border-2 border-foreground" />
+
+              {/* Paragraphs */}
+              <div className="space-y-4">
+                <div className="h-4 bg-muted w-full" />
+                <div className="h-4 bg-muted w-11/12" />
+                <div className="h-4 bg-muted w-10/12" />
+                <div className="h-4 bg-muted w-full" />
+                <div className="h-4 bg-muted w-9/12" />
+              </div>
+            </article>
+
+            {/* SIDEBAR */}
+            <aside className="lg:col-span-4 space-y-8 animate-pulse">
+              <div className="h-40 bg-muted border-2 border-foreground" />
+              <div className="h-48 bg-muted border-2 border-foreground" />
+              <div className="h-40 bg-muted border-2 border-foreground" />
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
 
 const BlogPostPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -50,7 +101,9 @@ const BlogPostPage = () => {
         if (!r.ok) throw new Error();
         return r.json();
       }),
-      fetch(`${apiUrl}/blogs`).then((r) => r.json()),
+      fetch(`${apiUrl}/blogs?limit=20`)
+        .then((r) => r.json())
+        .then((d) => d.items),
       fetch(`${apiUrl}/categories`).then((r) => r.json()),
     ])
       .then(([postData, allPosts, cats]) => {
@@ -58,11 +111,13 @@ const BlogPostPage = () => {
         setCategories(cats);
 
         setRelatedPosts(
-          allPosts.filter(
-            (p: BlogPost) =>
-              p.category.name === postData.category.name &&
-              p.slug !== postData.slug
-          ).slice(0, 2)
+          allPosts
+            .filter(
+              (p: BlogPost) =>
+                p.category.name === postData.category.name &&
+                p.slug !== postData.slug
+            )
+            .slice(0, 2)
         );
       })
       .catch(() => setNotFound(true))
@@ -70,15 +125,7 @@ const BlogPostPage = () => {
   }, [slug]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <div className="pt-32 text-center text-muted-foreground">
-          Loading…
-        </div>
-        <Footer />
-      </div>
-    );
+  return <BlogPostSkeleton />;
   }
 
   if (notFound || !post) {
@@ -135,18 +182,18 @@ const BlogPostPage = () => {
           <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-10">
             {/* MAIN */}
             <article className="lg:col-span-8 border-l-4 border-foreground pl-6">
-{post.imageUrl && (
-  <figure className="mb-10">
-    <img
-      src={post.imageUrl}
-      alt={post.title}
-      className="rounded border-2 border-foreground"
-    />
-    <figcaption className="mt-2 text-xs text-muted-foreground">
-      {post.title}
-    </figcaption>
-  </figure>
-)}
+              {post.imageUrl && (
+                <figure className="mb-10">
+                  <img
+                    src={post.imageUrl}
+                    alt={post.title}
+                    className="rounded border-2 border-foreground"
+                  />
+                  <figcaption className="mt-2 text-xs text-muted-foreground">
+                    {post.title}
+                  </figcaption>
+                </figure>
+              )}
 
               <div className="prose prose-lg prose-headings:font-bold prose-headings:tracking-tight prose-p:text-muted-foreground max-w-none">
                 {post.content.split("\n").map((p, i) => {
@@ -166,41 +213,41 @@ const BlogPostPage = () => {
               </div>
 
               {/* SHARE */}
-<div className="border-t-2 border-foreground mt-12 pt-8">
-  <div className="flex items-center gap-4">
-    <span className="font-bold flex items-center gap-2">
-      <Share2 className="w-5 h-5" />
-      Share:
-    </span>
+              <div className="border-t-2 border-foreground mt-12 pt-8">
+                <div className="flex items-center gap-4">
+                  <span className="font-bold flex items-center gap-2">
+                    <Share2 className="w-5 h-5" />
+                    Share:
+                  </span>
 
-    <a
-      href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="hover:text-primary"
-    >
-      <Facebook />
-    </a>
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
+                    <Facebook />
+                  </a>
 
-    <a
-      href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="hover:text-primary"
-    >
-      <Twitter />
-    </a>
+                  <a
+                    href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
+                    <Twitter />
+                  </a>
 
-    <a
-      href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="hover:text-primary"
-    >
-      <Linkedin />
-    </a>
-  </div>
-</div>
+                  <a
+                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-primary"
+                  >
+                    <Linkedin />
+                  </a>
+                </div>
+              </div>
 
             </article>
 

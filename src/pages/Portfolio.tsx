@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import { ArrowRight, X } from "lucide-react";
 import { apiUrl } from "@/constants/constants";
 
 type Category = {
-  id: string;
   name: string;
 };
 
@@ -19,35 +18,108 @@ type PortfolioItem = {
   imageUrl: string;
   category: Category;
 };
+const PortfolioSkeleton = () => {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="pt-16 md:pt-20">
+        {/* HERO */}
+        <section className="bg-foreground text-background py-16 md:py-24">
+          <div className="container mx-auto px-4 animate-pulse">
+            <div className="h-4 w-32 bg-background/30 mb-4" />
+            <div className="h-10 md:h-14 w-2/3 bg-background/30 mb-6" />
+            <div className="h-5 w-3/4 bg-background/30" />
+          </div>
+        </section>
+
+        {/* FILTER */}
+        <section className="py-8 bg-accent border-b-2 border-foreground">
+          <div className="container mx-auto px-4 flex gap-3 animate-pulse">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div
+                key={i}
+                className="h-9 w-24 bg-muted border-2 border-foreground"
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* GRID */}
+        <section className="py-16 md:py-24">
+          <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <div
+                key={i}
+                className="border-2 border-foreground bg-card"
+              >
+                <div className="aspect-[4/3] bg-muted" />
+                <div className="p-4 space-y-3">
+                  <div className="h-4 w-24 bg-muted" />
+                  <div className="h-5 w-3/4 bg-muted" />
+                  <div className="h-4 w-1/2 bg-muted" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="py-16 md:py-24 bg-secondary">
+          <div className="container mx-auto px-4 text-center animate-pulse">
+            <div className="h-10 w-1/2 mx-auto bg-secondary-foreground/30 mb-6" />
+            <div className="h-5 w-2/3 mx-auto bg-secondary-foreground/30 mb-8" />
+            <div className="h-12 w-56 mx-auto bg-background border-2 border-foreground" />
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
 
 const Portfolio = () => {
-  const [categories, setCategories] = useState<string[]>(["All"]);
+  // const [categories, setCategories] = useState<string[]>(["All"]);
   const [items, setItems] = useState<PortfolioItem[]>([]);
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
   const [loading, setLoading] = useState(true);
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
 
-  /* Fetch categories */
-  useEffect(() => {
-    fetch(`${apiUrl}/portfolio/categories`)
-      .then((res) => res.json())
-      .then((data: Category[]) =>
-        setCategories(["All", ...data.map((c) => c.name)])
-      );
-  }, []);
+  const categories = useMemo(() => [
+    "All",
+    ...Array.from(new Set(items.map(i => i.category.name))).sort(),
+  ], [items]);
 
   /* Fetch portfolio items */
+  const fetchItems = async (initial = false) => {
+    setLoading(true);
+
+    const url = new URL(`${apiUrl}/portfolio`);
+    url.searchParams.set("limit", "9");
+    if (!initial && cursor) url.searchParams.set("cursor", cursor);
+
+    const res = await fetch(url.toString());
+    const data = await res.json();
+
+    setItems(prev => (initial ? data.items : [...prev, ...data.items]));
+    setCursor(data.nextCursor);
+    setHasMore(Boolean(data.nextCursor));
+
+    setLoading(false);
+  };
+
+
   useEffect(() => {
-    fetch(`${apiUrl}/portfolio`)
-      .then((res) => res.json())
-      .then(setItems)
-      .finally(() => setLoading(false));
+    fetchItems(true);
   }, []);
 
-  const filteredItems =
-    activeCategory === "All"
-      ? items
-      : items.filter((i) => i.category.name === activeCategory);
+  const filteredItems = useMemo(() => {
+    if (activeCategory === "All") return items;
+    return items.filter(i => i.category.name === activeCategory);
+  }, [items, activeCategory]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -93,9 +165,7 @@ const Portfolio = () => {
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
             {loading ? (
-              <p className="text-center text-muted-foreground">
-                Loading portfolio…
-              </p>
+              <PortfolioSkeleton />
             ) : filteredItems.length === 0 ? (
               <p className="text-center text-muted-foreground">
                 No projects found.
@@ -112,6 +182,8 @@ const Portfolio = () => {
                       <img
                         src={item.imageUrl}
                         alt={item.title}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                       />
                     </div>
@@ -139,7 +211,7 @@ const Portfolio = () => {
               Like What You See?
             </h2>
             <p className="text-xl text-secondary-foreground/90 mb-8 max-w-2xl mx-auto">
-              Let’s create something powerful for your brand.
+              Let's create something powerful for your brand.
             </p>
             <Button variant="outline" size="xl" className="bg-background" asChild>
               <Link to="/contact">
@@ -148,6 +220,17 @@ const Portfolio = () => {
             </Button>
           </div>
         </section>
+        {hasMore && !loading && (
+        <div className="flex justify-center mt-12">
+          <button
+            onClick={() => fetchItems()}
+            disabled={loading}
+            className="px-8 py-3 font-bold uppercase border-2 border-foreground disabled:opacity-50"
+          >
+            {loading ? "Loading..." : "Load More"}
+          </button>
+        </div>
+      )}
       </main>
 
       <Footer />

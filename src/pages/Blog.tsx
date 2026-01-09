@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, User, ArrowRight } from "lucide-react";
 import Header from "@/components/layout/Header";
@@ -12,39 +12,70 @@ type BlogPost = {
   excerpt: string;
   imageUrl: string | null;
   category: {
-    id: string;
+    // id: string;
     name: string;
+    slug: string;
   };
   createdAt: string;
 };
 
 const Blog = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [categories, setCategories] = useState<string[]>(["All"]);
+  // const [categories, setCategories] = useState<string[]>(["All"]);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
 
-  // Fetch categories
-  useEffect(() => {
-    fetch(`${apiUrl}/categories`)
-      .then((res) => res.json())
-      .then((data) =>
-        setCategories(["All", ...data.map((c: any) => c.name)])
-      );
-  }, []);
-
+  // // Fetch categories
+  // useEffect(() => {
+  //   fetch(`${apiUrl}/categories`)
+  //     .then((res) => res.json())
+  //     .then((data) =>
+  //       setCategories(["All", ...data.map((c: any) => c.name)])
+  //     );
+  // }, []);
+const categories = useMemo(() => {
+  return [
+    "All",
+    ...Array.from(
+      new Set(posts.map(p => p.category.name))
+    ).sort()
+  ];
+}, [posts]);
+useEffect(() => {
+  if (!loading && posts.length > 0) {
+    window.scrollBy({ top: 300, behavior: "smooth" });
+  }
+}, [posts]);
   // Fetch blogs
-  useEffect(() => {
-    fetch(`${apiUrl}/blogs`)
-      .then((res) => res.json())
-      .then(setPosts)
-      .finally(() => setLoading(false));
-  }, []);
+const fetchBlogs = async (initial = false) => {
+  setLoading(true);
 
-  const filteredPosts =
-    activeCategory === "All"
-      ? posts
-      : posts.filter((p) => p.category.name === activeCategory);
+  const url = new URL(`${apiUrl}/blogs`);
+  url.searchParams.set("limit", "9");
+  if (!initial && cursor) {
+    url.searchParams.set("cursor", cursor);
+  }
+
+  const res = await fetch(url.toString());
+  const data = await res.json();
+
+  setPosts(prev => initial ? data.items : [...prev, ...data.items]);
+  setCursor(data.nextCursor);
+  setHasMore(Boolean(data.nextCursor));
+
+  setLoading(false);
+};
+
+useEffect(() => {
+  fetchBlogs(true);
+}, []);
+
+const filteredPosts = useMemo(() => {
+  if (activeCategory === "All") return posts;
+  return posts.filter(p => p.category.name === activeCategory);
+}, [posts, activeCategory]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -100,6 +131,17 @@ const Blog = () => {
             )}
           </div>
         </section>
+        {hasMore && (
+  <div className="flex justify-center mt-12">
+    <button
+      onClick={() => fetchBlogs()}
+      disabled={loading}
+      className="px-8 py-3 border-2 border-foreground font-bold uppercase hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
+    >
+      {loading ? "Loading..." : "Load More"}
+    </button>
+  </div>
+)}
       </main>
 
       <Footer />
@@ -117,6 +159,8 @@ const BlogCard = ({ post }: { post: BlogPost }) => {
           <img
             src={post.imageUrl}
             alt={post.title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover"
           />
         )}
