@@ -34,7 +34,7 @@ export default function AdminPortfolio() {
       credentials: "include",
     });
     const data = await res.json();
-    setItems(data);
+    setItems(data.items);
   };
 
   useEffect(() => {
