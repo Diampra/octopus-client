@@ -25,17 +25,17 @@ const TestimonialsSection = () => {
   if (testimonials.length === 0) return null; // hide section if none featured
 
   return (
-    <section className="py-16 md:py-24 bg-foreground text-background">
+    <section className="py-16 md:py-24 bg-accent">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <span className="inline-block bg-secondary text-secondary-foreground px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 border-2 border-background shadow-sm">
+          <span className="inline-block bg-secondary text-secondary-foreground px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 border-2 border-foreground shadow-sm">
             Testimonials
           </span>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6">
             What Our <span className="text-secondary">Clients Say</span>
           </h2>
-          <p className="text-background/80 text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Don&apos;t just take our word for it — hear from our satisfied customers.
           </p>
         </div>
@@ -45,7 +45,7 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="bg-background text-foreground border-2 border-background p-6 relative shadow-sm"
+              className="bg-background border-2 border-foreground p-6 shadow-sm hover:shadow-md hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
             >
               <Quote className="w-10 h-10 text-primary/20 absolute top-4 right-4" />
 
