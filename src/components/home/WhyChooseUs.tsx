@@ -36,7 +36,7 @@ const WhyChooseUs = () => {
             The Octopus <span className="text-secondary">Advantage</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            We're not just printers — we're your creative partners in building a memorable brand.
+            We're not just printers - we're your creative partners in building a memorable brand.
           </p>
         </div>
 

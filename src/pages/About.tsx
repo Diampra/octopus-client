@@ -55,7 +55,7 @@ const About = () => {
                   Octopus Inc. is a leading printing and branding company based in Patna, Bihar. With over a decade of experience, we've been helping businesses of all sizes create impactful brand identities.
                 </p>
                 <p className="text-background/70">
-                  From premium visiting cards to large format banners, UV prints to complete branding solutions — we combine creativity with cutting-edge printing technology to deliver exceptional results.
+                  From premium visiting cards to large format banners, UV prints to complete branding solutions - we combine creativity with cutting-edge printing technology to deliver exceptional results.
                 </p>
               </div>
               <div className="border-2 border-background shadow-lg overflow-hidden">

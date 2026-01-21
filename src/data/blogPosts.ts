@@ -259,7 +259,7 @@ Choose Octopus Inc. for printing that looks good and does good.
     content: `
 # Color Psychology in Marketing Materials
 
-Colors aren't just aesthetic choices—they're powerful psychological tools that influence how customers perceive your brand.
+Colors aren't just aesthetic choices-they're powerful psychological tools that influence how customers perceive your brand.
 
 ## The Meaning of Colors
 

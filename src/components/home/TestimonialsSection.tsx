@@ -36,7 +36,7 @@ const TestimonialsSection = () => {
             What Our <span className="text-secondary">Clients Say</span>
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Don&apos;t just take our word for it — hear from our satisfied customers.
+            Don&apos;t just take our word for it - hear from our satisfied customers.
           </p>
         </div>
 
