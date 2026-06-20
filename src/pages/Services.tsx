@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Header from "@/components/layout/Header";
+import useEmblaCarousel from "embla-carousel-react";
 import Footer from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
@@ -34,6 +35,37 @@ export default function Services() {
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+  });
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    const onSelect = () => setActiveIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    return () => { emblaApi.off("select", onSelect); };
+  }, [emblaApi]);
+
+  const pointerDownX = useRef<number>(0);
+  const isDragging = useRef<boolean>(false);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    pointerDownX.current = e.clientX;
+    isDragging.current = false;
+  }, []);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (Math.abs(e.clientX - pointerDownX.current) > 5) {
+      isDragging.current = true;
+    }
+  }, []);
+
+  const handleCardClick = useCallback((i: number) => {
+    if (isDragging.current) return;
+    setActiveIndex(i);
+    emblaApi?.scrollTo(i);
+  }, [emblaApi]);
 
   useEffect(() => {
     fetch(`${apiUrl}/services`)
@@ -168,6 +200,72 @@ export default function Services() {
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div key={i} className="h-32 bg-background animate-pulse" />
                 ))}
+              </div>
+            ) : services.length > 2 ? (
+              <div 
+                className="overflow-hidden bg-border cursor-grab active:cursor-grabbing border-b border-border h-[calc(100vh-4rem-114px)]" 
+                ref={emblaRef}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+              >
+                <div className="flex h-full gap-px">
+                  {services.map((service, i) => {
+                    const Icon = iconMap[service.icon] ?? Layers;
+                    const isActive = i === activeIndex;
+
+                    return (
+                      <div
+                        key={service.id}
+                        onClick={() => handleCardClick(i)}
+                        className={`flex-[0_0_100%] sm:flex-[0_0_55%] xl:flex-[0_0_45%] min-w-0 group cursor-pointer transition-colors duration-300 bg-background flex flex-col ${
+                          isActive ? "bg-foreground text-background" : "hover:bg-muted/10"
+                        }`}
+                      >
+                        {/* Image thumbnail */}
+                        <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden">
+                          <img
+                            src={service.imageUrl}
+                            alt={service.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05] pointer-events-none"
+                          />
+                          <div className={`absolute inset-0 transition-colors pointer-events-none ${isActive ? "bg-foreground/20" : "bg-foreground/10 group-hover:bg-foreground/5"}`} />
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 p-8 flex flex-col justify-between border-t border-border pointer-events-none">
+                          <div>
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className={`w-10 h-10 border flex items-center justify-center transition-colors ${
+                                isActive ? "border-background/40 text-background" : "border-foreground/20 text-foreground"
+                              }`}>
+                                <Icon className="w-4 h-4" />
+                              </div>
+                              <span className={`font-mono text-[10px] uppercase tracking-widest ${isActive ? "text-background/50" : "text-muted-foreground"}`}>
+                                0{i + 1} / {String(services.length).padStart(2, "0")}
+                              </span>
+                            </div>
+                            <h2 className="text-2xl font-bold tracking-tight uppercase mb-3 leading-none">{service.title}</h2>
+                            <p className={`text-sm leading-relaxed line-clamp-3 ${isActive ? "text-background/70" : "text-muted-foreground"}`}>
+                              {service.description}
+                            </p>
+                          </div>
+
+                          {/* Feature tags */}
+                          <div className="flex flex-wrap gap-2 mt-8">
+                            {service.features.slice(0, 3).map((f, fi) => (
+                              <span key={fi} className={`font-mono px-2 py-1 text-[9px] font-bold uppercase tracking-widest transition-colors ${
+                                isActive ? "bg-background/10 text-background" : "bg-muted text-muted-foreground"
+                              }`}>
+                                {f}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             ) : (
               <>

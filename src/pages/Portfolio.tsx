@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import Header from "@/components/layout/Header";
+import useEmblaCarousel from "embla-carousel-react";
 import Footer from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight, X } from "lucide-react";
@@ -23,6 +24,30 @@ const Portfolio = () => {
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [emblaRef] = useEmblaCarousel({
+    align: "start",
+    dragFree: true,
+  });
+
+  const pointerDownX = useRef<number>(0);
+  const isDragging = useRef<boolean>(false);
+
+  const handlePointerDown = useCallback((e: React.PointerEvent) => {
+    pointerDownX.current = e.clientX;
+    isDragging.current = false;
+  }, []);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent) => {
+    if (Math.abs(e.clientX - pointerDownX.current) > 5) {
+      isDragging.current = true;
+    }
+  }, []);
+
+  const handleCardClick = useCallback((item: PortfolioItem) => {
+    if (isDragging.current) return;
+    setSelectedItem(item);
+  }, []);
 
   const categories = useMemo(
     () => ["All", ...Array.from(new Set(items.map((i) => i.category.name))).sort()],
@@ -93,158 +118,177 @@ const Portfolio = () => {
           </div>
         </section>
 
-        {/* ── STICKY FILTER BAR ── */}
-        <div className="sticky top-16 z-30 bg-background/95 backdrop-blur-sm border-b border-border">
-          <div className="container mx-auto px-4 flex gap-6 overflow-x-auto py-4 scrollbar-hide">
-            {categories.map((c) => (
-              <button
-                key={c}
-                onClick={() => { setActiveCategory(c); setActiveIndex(0); }}
-                className={`shrink-0 pb-1.5 text-xs font-bold font-mono uppercase tracking-widest transition-colors border-b-2 ${
-                  activeCategory === c
-                    ? "border-primary text-primary"
-                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* ── STICKY LEFT + SCROLL RIGHT ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 border-t border-border relative">
 
-          {/* Sticky Left — active project detail */}
-          <div className="hidden lg:block lg:col-span-4 relative border-r border-border">
-            <div className="sticky top-[calc(4rem+49px)] h-[calc(100vh-4rem-49px)] flex flex-col justify-between px-8 xl:px-12 py-10 overflow-hidden">
-
+          {/* Sticky Left — Filters */}
+          <div className="hidden lg:block lg:col-span-3 xl:col-span-4 relative border-r border-border bg-foreground text-background">
+            <div className="sticky top-[5rem] h-[calc(100vh-5rem)] flex flex-col justify-between p-8 xl:p-12 overflow-hidden">
+              
               {/* Ghost word */}
               <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
-                <span className="text-[10vw] font-black uppercase tracking-tighter leading-none text-foreground/[0.025] whitespace-nowrap">
-                  PROJECT
+                <span className="text-[12vw] font-black uppercase tracking-tighter leading-none text-background/[0.02] whitespace-nowrap -rotate-90 translate-x-1/4">
+                  FILTER
                 </span>
               </div>
 
               <div className="relative z-10 flex flex-col h-full">
-                {/* Active project preview */}
-                {active ? (
-                  <div key={active.id} className="animate-fade-in flex flex-col h-full">
-                    {/* Thumbnail */}
-                    <div className="aspect-[4/3] w-full overflow-hidden mb-6 bg-muted relative group">
-                      <img
-                        src={active.imageUrl}
-                        alt={active.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-foreground/10" />
-                    </div>
-
-                    <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-2">
-                      {active.category.name} — {String(activeIndex + 1).padStart(2, "0")} / {String(filteredItems.length).padStart(2, "0")}
-                    </p>
-                    <h2 className="text-2xl font-bold tracking-tight mb-3 leading-tight">{active.title}</h2>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Client: <span className="font-semibold text-foreground">{active.client}</span>
-                    </p>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-6 flex-grow">
-                      {active.description}
-                    </p>
-
-                    <button
-                      onClick={() => setSelectedItem(active)}
-                      className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-widest border-b-2 border-foreground pb-1 hover:text-primary hover:border-primary transition-colors w-fit"
-                    >
-                      View Full Project <ArrowUpRight className="w-3 h-3" />
-                    </button>
+                <div>
+                  <h2 className="text-2xl font-bold uppercase tracking-tighter mb-10 text-background/90">Categories</h2>
+                  <div className="flex flex-col gap-6">
+                    {categories.map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => { setActiveCategory(c); setActiveIndex(0); }}
+                        className={`text-left font-mono text-sm font-bold uppercase tracking-widest transition-all group flex items-center gap-3 ${
+                          activeCategory === c
+                            ? "text-primary translate-x-2"
+                            : "text-background/50 hover:text-background hover:translate-x-1"
+                        }`}
+                      >
+                        {activeCategory === c && <ArrowRight className="w-4 h-4" />}
+                        {c}
+                      </button>
+                    ))}
                   </div>
-                ) : (
-                  <div className="flex-1 flex items-center justify-center text-muted-foreground font-mono text-sm uppercase tracking-widest">
-                    No project selected
-                  </div>
-                )}
+                </div>
+
+                <div className="mt-auto pt-12 border-t border-background/20">
+                  <p className="font-mono text-[10px] uppercase tracking-widest text-background/40">
+                    Displaying <span className="text-background">{String(filteredItems.length).padStart(2, '0')}</span> projects
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Scrollable Right — grid */}
-          <div className="lg:col-span-8">
+          {/* Scrollable Right — Grid */}
+          <div className="lg:col-span-9 xl:col-span-8 bg-background">
+            
+            {/* Mobile Filter Bar (Hidden on desktop) */}
+            <div className="lg:hidden sticky top-16 z-30 bg-background/95 backdrop-blur-md border-b border-border">
+              <div className="container mx-auto px-4 flex gap-6 overflow-x-auto py-4 scrollbar-hide">
+                {categories.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => { setActiveCategory(c); setActiveIndex(0); }}
+                    className={`shrink-0 pb-1.5 text-xs font-bold font-mono uppercase tracking-widest transition-colors border-b-2 ${
+                      activeCategory === c
+                        ? "border-primary text-primary"
+                        : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
+                    }`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {loading && items.length === 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border p-0">
-                {Array.from({ length: 6 }).map((_, i) => (
+                {Array.from({ length: 8 }).map((_, i) => (
                   <div key={i} className="aspect-[4/3] bg-muted animate-pulse" />
                 ))}
               </div>
             ) : filteredItems.length === 0 ? (
-              <div className="flex items-center justify-center py-32">
-                <p className="text-muted-foreground font-mono text-sm uppercase tracking-widest">No projects found.</p>
+              <div className="flex flex-col items-center justify-center py-32 px-4 text-center">
+                <p className="text-foreground font-mono text-sm font-bold uppercase tracking-widest mb-2">No projects found</p>
+                <p className="text-muted-foreground text-sm">Try selecting a different category.</p>
+              </div>
+            ) : filteredItems.length > 2 ? (
+              <div 
+                className="overflow-hidden bg-border cursor-grab active:cursor-grabbing border-b border-border" 
+                ref={emblaRef}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+              >
+                <div className="flex gap-px">
+                  {filteredItems.map((item, i) => (
+                    <div
+                      key={item.id}
+                      className="flex-[0_0_100%] sm:flex-[0_0_50%] min-w-0 group relative overflow-hidden transition-colors bg-background"
+                      onClick={() => handleCardClick(item)}
+                    >
+                      {/* Image Area */}
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.title}
+                          loading={i < 4 ? "eager" : "lazy"}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
+                        />
+                        <div className="absolute inset-0 bg-foreground/20 group-hover:bg-foreground/10 transition-colors duration-500 pointer-events-none" />
+                        
+                        {/* Hover Overlay Arrow */}
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-foreground/20 backdrop-blur-[2px] pointer-events-none">
+                          <div className="w-16 h-16 rounded-full bg-background flex items-center justify-center text-foreground scale-75 group-hover:scale-100 transition-transform duration-500 ease-out">
+                            <ArrowUpRight className="w-6 h-6" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Info block */}
+                      <div className="px-6 py-5 border-t border-border group-hover:bg-foreground group-hover:text-background transition-colors duration-300 pointer-events-none">
+                        <p className="font-mono text-[9px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-background/50 mb-1.5 transition-colors">
+                          {item.category.name}
+                        </p>
+                        <h3 className="text-lg font-bold tracking-tight line-clamp-1">{item.title}</h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border border-b border-border">
                 {filteredItems.map((item, i) => (
                   <div
                     key={item.id}
-                    ref={(el) => { itemRefs.current[i] = el; }}
-                    className={`group relative overflow-hidden cursor-pointer transition-colors ${
-                      i === activeIndex ? "ring-2 ring-inset ring-primary" : ""
-                    }`}
-                    onClick={() => { setActiveIndex(i); setSelectedItem(item); }}
+                    className="group relative overflow-hidden cursor-pointer transition-colors bg-background"
+                    onClick={() => setSelectedItem(item)}
                   >
-                    {/* Image — 72% */}
+                    {/* Image Area */}
                     <div className="relative aspect-[4/3] overflow-hidden">
                       <img
                         src={item.imageUrl}
                         alt={item.title}
                         loading={i < 4 ? "eager" : "lazy"}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-foreground/20 group-hover:bg-foreground/10 transition-colors duration-400" />
-                      {/* Category pill */}
-                      <div className="absolute top-4 left-4">
-                        <span className="font-mono text-[9px] uppercase tracking-widest text-background/80 bg-foreground/50 px-2.5 py-1 backdrop-blur-sm">
-                          {item.category.name}
-                        </span>
-                      </div>
-                      {/* Arrow icon on hover */}
-                      <div className="absolute bottom-4 right-4 w-9 h-9 border border-background/30 flex items-center justify-center bg-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
-                        <ArrowUpRight className="w-4 h-4 text-background" />
+                      <div className="absolute inset-0 bg-foreground/20 group-hover:bg-foreground/10 transition-colors duration-500" />
+                      
+                      {/* Hover Overlay Arrow */}
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-foreground/20 backdrop-blur-[2px]">
+                        <div className="w-16 h-16 rounded-full bg-background flex items-center justify-center text-foreground scale-75 group-hover:scale-100 transition-transform duration-500 ease-out">
+                          <ArrowUpRight className="w-6 h-6" />
+                        </div>
                       </div>
                     </div>
 
-                    {/* Info strip */}
-                    <div className={`px-5 py-4 flex items-center justify-between transition-colors ${
-                      i === activeIndex ? "bg-foreground text-background" : "bg-background"
-                    }`}>
-                      <div>
-                        <p className={`font-mono text-[9px] uppercase tracking-widest mb-0.5 ${i === activeIndex ? "text-background/50" : "text-muted-foreground"}`}>
-                          {item.category.name}
-                        </p>
-                        <h3 className="text-sm font-bold tracking-tight line-clamp-1">{item.title}</h3>
-                      </div>
-                      <span className={`font-mono text-[10px] ${i === activeIndex ? "text-primary" : "text-foreground/20"}`}>
-                        0{i + 1}
-                      </span>
+                    {/* Info block */}
+                    <div className="px-6 py-5 border-t border-border group-hover:bg-foreground group-hover:text-background transition-colors duration-300">
+                      <p className="font-mono text-[9px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-background/50 mb-1.5 transition-colors">
+                        {item.category.name}
+                      </p>
+                      <h3 className="text-lg font-bold tracking-tight line-clamp-1">{item.title}</h3>
                     </div>
                   </div>
                 ))}
               </div>
             )}
 
+            {/* Load More */}
             {hasMore && !loading && (
-              <div className="px-8 py-10 border-t border-border flex items-center justify-between">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Showing {filteredItems.length} projects
-                </span>
+              <div className="px-6 py-12 border-t border-border flex justify-center bg-background">
                 <button
                   onClick={() => fetchItems()}
-                  className="inline-flex items-center gap-2 bg-foreground text-background px-6 py-3 text-xs font-bold uppercase tracking-wider hover:bg-foreground/90 transition-colors"
+                  className="inline-flex items-center gap-3 bg-foreground text-background border border-foreground px-8 py-4 text-xs font-mono font-bold uppercase tracking-widest hover:bg-background hover:text-foreground transition-colors group"
                 >
-                  Load More <ArrowRight className="w-3 h-3" />
+                  Load More Projects
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             )}
           </div>
-
         </div>
 
         {/* ── BOTTOM CTA ── */}
