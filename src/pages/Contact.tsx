@@ -4,9 +4,8 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
-import { Phone, Mail, MapPin, MessageCircle, Clock, Send, Star, CheckCircle, ArrowRight, Shield } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Clock, ArrowRight, Shield, CheckCircle } from "lucide-react";
 
 const contactInfo = [
   {
@@ -69,205 +68,216 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="pt-16 md:pt-20 relative overflow-hidden">
-        {/* Hero Section */}
-        <section className="bg-background py-24 md:py-32 relative z-10">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl">
-              <span className="inline-block text-primary font-mono text-sm uppercase tracking-widest mb-6">
-                Contact Us
-              </span>
-              <h1 className="text-5xl md:text-7xl font-light tracking-tighter leading-none mb-6">
-                Let's <span className="font-bold">Connect</span>
-              </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground font-medium leading-relaxed">
-                Have a project in mind? Get in touch with us for a free consultation and custom quote. We're here to help bring your ideas to life.
-              </p>
-            </div>
-          </div>
-        </section>
 
-        {/* Contact Section */}
-        <section className="py-16 md:py-24 relative z-10">
-          <div className="container mx-auto px-4">
-            
-            {/* Trust Signals Strip */}
-            <div className="flex flex-wrap gap-4 md:gap-8 justify-center items-center mb-16 py-8">
-              <div className="flex items-center gap-2 font-medium text-sm md:text-base text-muted-foreground"><MessageCircle className="w-5 h-5 text-primary" /> Trusted by 500+ Businesses</div>
-              <div className="hidden md:block w-1.5 h-1.5 bg-muted-foreground/30 rounded-full"></div>
-              <div className="flex items-center gap-2 font-medium text-sm md:text-base text-muted-foreground"><Clock className="w-5 h-5 text-primary" /> 10+ Years Experience</div>
-              <div className="hidden md:block w-1.5 h-1.5 bg-muted-foreground/30 rounded-full"></div>
-              <div className="flex items-center gap-2 font-medium text-sm md:text-base text-muted-foreground"><MapPin className="w-5 h-5 text-primary" /> 3000+ Projects Delivered</div>
-              <div className="hidden md:block w-1.5 h-1.5 bg-muted-foreground/30 rounded-full"></div>
-              <div className="flex items-center gap-2 font-medium text-sm md:text-base text-muted-foreground"><Star className="w-5 h-5 text-primary fill-primary" /> 4.9/5 Client Satisfaction</div>
-            </div>
+      <main className="pt-16 md:pt-20">
+        <section className="bg-background relative overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12">
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-              
-              {/* Contact Form - Primary Focus */}
-              <div className="lg:col-span-7 bg-muted/30 p-8 md:p-12 rounded-3xl">
-                <div className="flex justify-between items-start mb-10">
-                  <div>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Start Your Project</h2>
-                    <p className="text-muted-foreground font-medium flex items-center gap-2 text-sm">
-                      <span className="relative flex h-3 w-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
-                      </span>
-                      Average reply within 30 minutes
-                    </p>
-                  </div>
-                  <div className="hidden sm:flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-bold">
-                    <CheckCircle className="w-4 h-4" /> Free Consultation
-                  </div>
+            {/* ── STICKY LEFT — contact info ── */}
+            <div className="lg:col-span-5 relative border-r border-border bg-foreground text-background">
+              <div className="sticky top-16 h-auto lg:h-[calc(100vh-4rem)] flex flex-col justify-between px-6 xl:px-14 py-16 overflow-y-auto scrollbar-hide">
+
+                {/* Ghost word */}
+                <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
+                  <span className="text-[14vw] font-black uppercase tracking-tighter leading-none text-background/[0.025] whitespace-nowrap">
+                    HELLO
+                  </span>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="name" className="font-bold uppercase tracking-wider text-xs text-muted-foreground">
-                        Your Name *
-                      </Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                        className="mt-2 bg-background border-border h-12 rounded-lg"
-                        placeholder="John Doe"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="email" className="font-bold uppercase tracking-wider text-xs text-muted-foreground">
-                        Email Address *
-                      </Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        required
-                        className="mt-2 bg-background border-border h-12 rounded-lg"
-                        placeholder="john@example.com"
-                      />
-                    </div>
-                  </div>
+                <div className="relative z-10 mb-16">
+                  <span className="inline-block bg-primary text-primary-foreground px-4 py-2 text-xs font-bold uppercase tracking-wider mb-6 border-2 border-background">
+                    [ Contact / Get in touch ]
+                  </span>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="phone" className="font-bold uppercase tracking-wider text-xs text-muted-foreground">
-                        Phone Number
-                      </Label>
-                      <Input
-                        id="phone"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="mt-2 bg-background border-border h-12 rounded-lg"
-                        placeholder="+91 98765 43210"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="service" className="font-bold uppercase tracking-wider text-xs text-muted-foreground">
-                        Service Required
-                      </Label>
-                      <select
-                        id="service"
-                        value={formData.service}
-                        onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                        className="mt-2 w-full h-12 px-3 border border-border rounded-lg bg-background font-medium text-foreground focus:ring-2 focus:ring-primary focus:outline-none"
-                      >
-                        <option value="">Select a service</option>
-                        <option value="visiting-cards">Visiting Cards</option>
-                        <option value="brochures">Brochures & Catalogues</option>
-                        <option value="banners">Banners & Flex</option>
-                        <option value="logo-design">Logo & Branding</option>
-                        <option value="stickers">Stickers & Labels</option>
-                        <option value="uv-acrylic">UV & Acrylic Prints</option>
-                        <option value="packaging">Packaging</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                  </div>
+                  <h1 className="text-5xl xl:text-6xl font-bold uppercase tracking-tighter leading-[0.9] mb-6">
+                    Start a <br />
+                    <span className="font-serif italic lowercase font-normal text-primary">project</span>
+                  </h1>
 
-                  <div>
-                    <Label htmlFor="message" className="font-bold uppercase tracking-wider text-xs text-muted-foreground">
-                      Your Message *
-                    </Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      required
-                      className="mt-2 min-h-32 bg-background border-border rounded-lg resize-y"
-                      placeholder="Tell us about your project..."
-                    />
-                  </div>
-
-                  <Button type="submit" variant="default" size="lg" disabled={isSubmitting} className="w-full text-lg h-14 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl group transition-all mt-4">
-                    <span className="flex items-center gap-2">
-                      {isSubmitting ? "Sending..." : "Get Free Quote"}
-                      <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </Button>
-                  
-                  <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground font-medium pt-4">
-                    <span className="flex items-center gap-1"><Shield className="w-4 h-4" /> No spam. Response within 24 hours.</span>
-                    <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4" /> Custom quote tailored to your needs.</span>
-                  </div>
-                </form>
-              </div>
-
-              {/* Side Information - Secondary & Tertiary */}
-              <div className="lg:col-span-5 flex flex-col gap-6">
-                
-                {/* WhatsApp CTA - Primary Focus */}
-                <div className="bg-[#25D366] text-white p-8 rounded-3xl shadow-lg relative overflow-hidden group cursor-pointer transition-transform hover:-translate-y-1" onClick={() => window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, "_blank")}>
-                  <div className="absolute right-[-20px] top-[-20px] opacity-10 group-hover:scale-110 transition-transform duration-500">
-                    <MessageCircle className="w-48 h-48" />
-                  </div>
-                  <h3 className="text-2xl font-bold mb-2 flex items-center gap-2 relative z-10">
-                    <MessageCircle className="w-8 h-8" /> 
-                    Fastest Response
-                  </h3>
-                  <p className="text-white/90 mb-8 font-medium relative z-10 text-lg">
-                    Need an immediate quote? Chat directly with our team on WhatsApp for same-day response.
+                  <p className="text-lg text-background/70 font-medium leading-relaxed max-w-md">
+                    Have a project in mind? Get in touch with us for a free consultation and custom quote. We're here to help bring your ideas to life.
                   </p>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full bg-white text-[#25D366] hover:bg-white/90 hover:text-[#25D366] border-none rounded-xl font-bold"
-                    asChild
-                  >
-                    <div>
-                      Chat on WhatsApp
-                    </div>
-                  </Button>
                 </div>
 
-                {/* Secondary Contact Info */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {contactInfo.map((info, index) => (
-                    <div
-                      key={index}
-                      className="bg-muted/30 p-6 rounded-2xl transition-colors hover:bg-muted/50"
-                    >
-                      <div className="w-12 h-12 text-primary flex items-center mb-4">
-                        <info.icon className="w-6 h-6" />
+                {/* Contact Info List */}
+                <div className="relative z-10 grid gap-8">
+                  {contactInfo.map((info, index) => {
+                    const Icon = info.icon;
+                    return (
+                      <div key={index} className="flex items-start gap-4">
+                        <div className="w-10 h-10 border border-background/20 flex items-center justify-center shrink-0">
+                          <Icon className="w-4 h-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="font-mono text-[10px] uppercase tracking-widest text-background/50 mb-1">
+                            {info.title}
+                          </p>
+                          {info.details.map((detail, i) => (
+                            <p key={i} className="text-sm text-background/90 font-medium leading-relaxed">
+                              {detail}
+                            </p>
+                          ))}
+                        </div>
                       </div>
-                      <h3 className="font-bold text-base mb-1">{info.title}</h3>
-                      {info.details.map((detail, i) => (
-                        <p key={i} className="text-sm text-muted-foreground">{detail}</p>
-                      ))}
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* ── SCROLLABLE RIGHT — form & map ── */}
+            <div className="lg:col-span-7 bg-background">
+              <div className="p-6 md:p-12 xl:p-20">
+
+                {/* Trust strip */}
+                <div className="flex flex-wrap gap-x-6 gap-y-3 mb-12 border-b border-border pb-8">
+                  <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground"><MessageCircle className="w-3 h-3 text-foreground" /> Trusted by 500+</div>
+                  <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground"><Clock className="w-3 h-3 text-foreground" /> 10+ Yrs Exp</div>
+                  <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground"><CheckCircle className="w-3 h-3 text-foreground" /> 4.9/5 Rating</div>
+                </div>
+
+                {/* Form Wrapper */}
+                <div className="mb-12">
+                  <div className="flex justify-between items-end mb-8">
+                    <div>
+                      <h2 className="text-3xl font-bold tracking-tight uppercase">Send a Message</h2>
                     </div>
-                  ))}
+                    <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                      </span>
+                      Replies in ~30 mins
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label htmlFor="name" className="font-mono text-[10px] uppercase tracking-widest font-bold text-foreground">
+                          Your Name *
+                        </label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          required
+                          className="rounded-none border-foreground/20 h-12 focus-visible:ring-0 focus-visible:border-foreground transition-colors bg-background"
+                          placeholder="John Doe"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="email" className="font-mono text-[10px] uppercase tracking-widest font-bold text-foreground">
+                          Email Address *
+                        </label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          required
+                          className="rounded-none border-foreground/20 h-12 focus-visible:ring-0 focus-visible:border-foreground transition-colors bg-background"
+                          placeholder="john@example.com"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label htmlFor="phone" className="font-mono text-[10px] uppercase tracking-widest font-bold text-foreground">
+                          Phone Number
+                        </label>
+                        <Input
+                          id="phone"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          className="rounded-none border-foreground/20 h-12 focus-visible:ring-0 focus-visible:border-foreground transition-colors bg-background"
+                          placeholder="+91 98765 43210"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label htmlFor="service" className="font-mono text-[10px] uppercase tracking-widest font-bold text-foreground">
+                          Service Required
+                        </label>
+                        <select
+                          id="service"
+                          value={formData.service}
+                          onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                          className="w-full h-12 px-3 border border-foreground/20 rounded-none bg-background text-sm focus:border-foreground focus:outline-none transition-colors appearance-none"
+                        >
+                          <option value="">Select a service</option>
+                          <option value="visiting-cards">Visiting Cards</option>
+                          <option value="brochures">Brochures & Catalogues</option>
+                          <option value="banners">Banners & Flex</option>
+                          <option value="logo-design">Logo & Branding</option>
+                          <option value="stickers">Stickers & Labels</option>
+                          <option value="uv-acrylic">UV & Acrylic Prints</option>
+                          <option value="packaging">Packaging</option>
+                          <option value="other">Other</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label htmlFor="message" className="font-mono text-[10px] uppercase tracking-widest font-bold text-foreground">
+                        Your Message *
+                      </label>
+                      <Textarea
+                        id="message"
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        required
+                        className="min-h-32 rounded-none border-foreground/20 focus-visible:ring-0 focus-visible:border-foreground transition-colors bg-background resize-y"
+                        placeholder="Tell us about your project..."
+                      />
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      disabled={isSubmitting} 
+                      className="w-full h-14 bg-foreground text-background hover:bg-foreground/90 rounded-none uppercase font-bold tracking-widest text-xs group transition-all mt-4"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        {isSubmitting ? "Sending..." : "Get Free Quote"}
+                        {!isSubmitting && <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />}
+                      </span>
+                    </Button>
+                    
+                    <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-muted-foreground pt-2">
+                      <Shield className="w-3 h-3" /> No spam. Custom quotes only.
+                    </div>
+                  </form>
+                </div>
+
+                {/* WhatsApp block — Brutalist */}
+                <div 
+                  className="border-2 border-[#25D366] bg-[#25D366]/5 p-8 mb-12 cursor-pointer group hover:bg-[#25D366] transition-colors duration-300"
+                  onClick={() => window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, "_blank")}
+                >
+                  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <MessageCircle className="w-6 h-6 text-[#25D366] group-hover:text-background transition-colors" />
+                        <h3 className="text-xl font-bold uppercase tracking-tight group-hover:text-background transition-colors">
+                          WhatsApp Us
+                        </h3>
+                      </div>
+                      <p className="text-muted-foreground text-sm max-w-sm group-hover:text-background/80 transition-colors">
+                        Need an immediate quote? Chat directly with our team for a same-day response.
+                      </p>
+                    </div>
+                    <div className="shrink-0 flex items-center justify-center w-12 h-12 border-2 border-[#25D366] text-[#25D366] group-hover:border-background group-hover:text-background transition-colors">
+                      <ArrowRight className="w-5 h-5 -rotate-45" />
+                    </div>
+                  </div>
                 </div>
                                 
-                {/* Google Map */}
-                <div className="rounded-2xl overflow-hidden h-full min-h-[250px] shadow-sm border border-border">
+                {/* Google Map — Sharp edges */}
+                <div className="border border-border h-[400px]">
                   <iframe
                     title="Octopus Inc Patna Location"
                     src="https://www.google.com/maps?q=Octopus+Inc,+Patna,+Bihar&z=15&output=embed"
-                    className="w-full h-full min-h-[250px]"
+                    className="w-full h-full filter grayscale hover:grayscale-0 transition-all duration-700"
                     style={{ border: 0 }}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
@@ -277,9 +287,11 @@ const Contact = () => {
 
               </div>
             </div>
+
           </div>
         </section>
       </main>
+
       <Footer />
     </div>
   );
