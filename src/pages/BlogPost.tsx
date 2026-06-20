@@ -35,30 +35,30 @@ const BlogPostSkeleton = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="pt-20 md:pt-24">
+      <main className="pt-16 md:pt-20">
         {/* HERO SKELETON */}
-        <section className="bg-primary text-primary-foreground py-12 md:py-20 border-b-4 border-foreground">
-          <div className="container mx-auto px-4 animate-pulse">
-            <div className="h-4 w-32 bg-primary-foreground/30 mb-6" />
-            <div className="h-10 md:h-14 w-3/4 bg-primary-foreground/30 mb-6" />
+        <section className="bg-foreground py-24 relative overflow-hidden">
+          <div className="container mx-auto px-4 relative z-10 animate-pulse">
+            <div className="h-6 w-24 bg-background/20 mb-8" />
+            <div className="h-12 md:h-20 lg:h-24 w-3/4 max-w-4xl bg-background/20 mb-8" />
             <div className="flex gap-6">
-              <div className="h-4 w-24 bg-primary-foreground/30" />
-              <div className="h-4 w-24 bg-primary-foreground/30" />
-              <div className="h-4 w-24 bg-primary-foreground/30" />
+              <div className="h-4 w-24 bg-background/20" />
+              <div className="h-4 w-24 bg-background/20" />
+              <div className="h-4 w-24 bg-background/20" />
             </div>
           </div>
         </section>
 
         {/* CONTENT SKELETON */}
-        <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <section className="border-t border-border">
+          <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* MAIN */}
-            <article className="lg:col-span-8 border-l-4 border-foreground pl-6 animate-pulse">
+            <article className="lg:col-span-8 p-8 md:p-12 xl:p-16 border-r border-border bg-background animate-pulse">
               {/* Image */}
-              <div className="w-full aspect-video bg-muted mb-10 border-2 border-foreground" />
+              <div className="w-full aspect-video bg-muted mb-12" />
 
               {/* Paragraphs */}
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <div className="h-4 bg-muted w-full" />
                 <div className="h-4 bg-muted w-11/12" />
                 <div className="h-4 bg-muted w-10/12" />
@@ -68,10 +68,12 @@ const BlogPostSkeleton = () => {
             </article>
 
             {/* SIDEBAR */}
-            <aside className="lg:col-span-4 space-y-8 animate-pulse">
-              <div className="h-40 bg-muted border-2 border-foreground" />
-              <div className="h-48 bg-muted border-2 border-foreground" />
-              <div className="h-40 bg-muted border-2 border-foreground" />
+            <aside className="lg:col-span-4 bg-muted/30">
+              <div className="p-8 md:p-12 animate-pulse space-y-8">
+                <div className="h-48 bg-muted" />
+                <div className="h-40 bg-muted" />
+                <div className="h-40 bg-muted" />
+              </div>
             </aside>
           </div>
         </section>
@@ -137,40 +139,44 @@ const BlogPostPage = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="pt-20 md:pt-24">
+      <main className="pt-16 md:pt-20">
         {/* HERO */}
-        <section className="bg-primary text-primary-foreground py-12 md:py-20 border-b-4 border-foreground">
-          <div className="container mx-auto px-4">
+        <section className="bg-foreground text-background py-24 relative overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+            <span className="text-[20vw] font-black uppercase tracking-tighter leading-none text-background/[0.03] whitespace-nowrap">
+              ARTICLE
+            </span>
+          </div>
+          <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-wrap items-center gap-4 mb-8">
               <Link
                 to="/blog"
-                className="inline-flex items-center gap-2 opacity-80 hover:opacity-100"
+                className="inline-flex items-center gap-2 text-background/50 hover:text-background font-mono text-sm uppercase tracking-widest transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Back to Blog
+                Back
               </Link>
               
-              <span className="inline-block px-3 py-1 text-xs font-bold uppercase border-2 border-foreground bg-background text-foreground">
+              <span className="inline-block bg-primary text-primary-foreground px-4 py-2 text-xs font-bold uppercase tracking-wider border-2 border-background">
                 {post.category.name}
               </span>
             </div>
 
-
-            <h1 className="text-3xl md:text-5xl font-bold max-w-4xl mb-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold uppercase tracking-tighter leading-[0.9] mb-8 max-w-5xl">
               {post.title}
             </h1>
 
-            <div className="flex flex-wrap gap-6 text-sm opacity-90">
+            <div className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-widest text-background/60">
               <span className="flex items-center gap-2">
-                <User className="w-5 h-5" />
+                <User className="w-4 h-4" />
                 {post.author}
               </span>
               <span className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
+                <Calendar className="w-4 h-4" />
                 {new Date(post.createdAt).toLocaleDateString()}
               </span>
               <span className="flex items-center gap-2">
-                <Clock className="w-5 h-5" />
+                <Clock className="w-4 h-4" />
                 {post.readTime}
               </span>
             </div>
@@ -178,73 +184,73 @@ const BlogPostPage = () => {
         </section>
 
         {/* CONTENT */}
-        <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <section className="border-t border-border">
+          <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* MAIN */}
-            <article className="lg:col-span-8 border-l-4 border-foreground pl-6">
+            <article className="lg:col-span-8 p-8 md:p-12 xl:p-16 border-r border-border bg-background">
               {post.imageUrl && (
-                <figure className="mb-10">
-                  <img
-                    src={post.imageUrl}
-                    alt={post.title}
-                    className="rounded border-2 border-foreground"
-                  />
-                  <figcaption className="mt-2 text-xs text-muted-foreground">
+                <figure className="mb-12">
+                  <div className="aspect-video w-full overflow-hidden bg-muted">
+                    <img
+                      src={post.imageUrl}
+                      alt={post.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <figcaption className="mt-4 text-xs font-mono uppercase tracking-widest text-muted-foreground text-center">
                     {post.title}
                   </figcaption>
                 </figure>
               )}
 
-              <div className="prose prose-lg prose-headings:font-bold prose-headings:tracking-tight prose-p:text-muted-foreground max-w-none">
+              <div className="prose prose-lg md:prose-xl prose-headings:font-bold prose-headings:uppercase prose-headings:tracking-tighter prose-p:text-muted-foreground prose-p:leading-relaxed prose-a:text-primary hover:prose-a:text-foreground max-w-none">
                 {post.content.split("\n").map((p, i) => {
                   if (p.startsWith("## "))
                     return (
-                      <h2 key={i}>{p.replace("## ", "")}</h2>
+                      <h2 key={i} className="mt-12 mb-6">{p.replace("## ", "")}</h2>
                     );
                   if (p.startsWith("### "))
                     return (
-                      <h3 key={i}>{p.replace("### ", "")}</h3>
+                      <h3 key={i} className="mt-8 mb-4">{p.replace("### ", "")}</h3>
                     );
                   if (p.startsWith("- "))
                     return <li key={i}>{p.replace("- ", "")}</li>;
-                  if (!p.trim()) return <div key={i} className="h-4" />;
+                  if (!p.trim()) return <div key={i} className="h-6" />;
                   return <p key={i}>{p}</p>;
                 })}
               </div>
 
               {/* SHARE */}
-              <div className="border-t-2 border-foreground mt-12 pt-8">
+              <div className="border-t border-border mt-16 pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <span className="font-mono text-sm font-bold uppercase tracking-widest text-foreground">
+                  Share this article
+                </span>
                 <div className="flex items-center gap-4">
-                  <span className="font-bold flex items-center gap-2">
-                    <Share2 className="w-5 h-5" />
-                    Share:
-                  </span>
-
                   <a
                     href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-primary"
+                    className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all"
                   >
-                    <Facebook />
+                    <Facebook className="w-4 h-4" />
                   </a>
 
                   <a
                     href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-primary"
+                    className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all"
                   >
-                    <Twitter />
+                    <Twitter className="w-4 h-4" />
                   </a>
 
                   <a
                     href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-primary"
+                    className="w-10 h-10 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:bg-foreground hover:text-background hover:border-foreground transition-all"
                   >
-                    <Linkedin />
+                    <Linkedin className="w-4 h-4" />
                   </a>
                 </div>
               </div>
@@ -252,53 +258,70 @@ const BlogPostPage = () => {
             </article>
 
             {/* SIDEBAR */}
-            <aside className="lg:col-span-4 space-y-8 sticky top-24">
-              {/* CTA */}
-              <div className="bg-primary text-primary-foreground p-6 border-2 border-foreground">
-                <h3 className="font-bold text-xl mb-3">Ready to Print?</h3>
-                <p className="opacity-90 mb-4">
-                  Get a free quote for your next project.
-                </p>
-                <Button variant="secondary" asChild>
-                  <Link to="/contact">Get a Quote</Link>
-                </Button>
-              </div>
-
-              {/* RELATED */}
-              {relatedPosts.length > 0 && (
-                <div className="border-2 border-foreground p-6 bg-card">
-                  <h3 className="font-bold mb-4 border-b-2 pb-2">
-                    Related Articles
+            <aside className="lg:col-span-4 bg-muted/30">
+              <div className="sticky top-[5rem]">
+                
+                {/* CTA */}
+                <div className="p-8 md:p-12 border-b border-border bg-foreground text-background">
+                  <h3 className="font-bold text-3xl uppercase tracking-tighter mb-4">
+                    Ready to <br/> <span className="text-primary italic font-serif lowercase font-normal">Start?</span>
                   </h3>
-                  {relatedPosts.map((r) => (
-                    <Link
-                      key={r.id}
-                      to={`/blog/${r.slug}`}
-                      className="block mb-3 hover:text-primary"
-                    >
-                      <strong>{r.title}</strong>
-                      <p className="text-sm text-muted-foreground">
-                        {r.excerpt}
-                      </p>
-                    </Link>
-                  ))}
-                </div>
-              )}
-
-              {/* CATEGORIES */}
-              <div className="border-2 border-foreground p-6">
-                <h3 className="font-bold mb-4 border-b-2 pb-2">
-                  Categories
-                </h3>
-                {categories.map((c) => (
-                  <Link
-                    key={c.id}
-                    to="/blog"
-                    className="block hover:text-primary"
+                  <p className="text-background/70 mb-8 font-medium">
+                    Let's bring your brand vision to life with our premium printing solutions.
+                  </p>
+                  <Link 
+                    to="/contact"
+                    className="inline-flex w-full items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-4 font-mono text-sm font-bold uppercase tracking-widest hover:bg-background hover:text-foreground transition-colors group"
                   >
-                    {c.name}
+                    Get a Quote
+                    <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                ))}
+                </div>
+
+                {/* RELATED */}
+                {relatedPosts.length > 0 && (
+                  <div className="p-8 md:p-12 border-b border-border">
+                    <h3 className="font-mono text-sm font-bold uppercase tracking-widest mb-8 text-foreground">
+                      Related Articles
+                    </h3>
+                    <div className="space-y-8">
+                      {relatedPosts.map((r) => (
+                        <Link
+                          key={r.id}
+                          to={`/blog/${r.slug}`}
+                          className="block group"
+                        >
+                          <h4 className="text-xl font-bold tracking-tight mb-2 group-hover:text-primary transition-colors">
+                            {r.title}
+                          </h4>
+                          <p className="text-sm text-muted-foreground line-clamp-2">
+                            {r.excerpt}
+                          </p>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* CATEGORIES */}
+                <div className="p-8 md:p-12">
+                  <h3 className="font-mono text-sm font-bold uppercase tracking-widest mb-8 text-foreground">
+                    Categories
+                  </h3>
+                  <div className="flex flex-col gap-4">
+                    {categories.map((c) => (
+                      <Link
+                        key={c.id}
+                        to="/blog"
+                        className="font-mono text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground hover:translate-x-1 transition-all flex items-center gap-2 group"
+                      >
+                        <ArrowLeft className="w-3 h-3 rotate-180 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all text-primary" />
+                        {c.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
               </div>
             </aside>
           </div>
