@@ -148,10 +148,18 @@ export default function AdminServiceForm() {
       }
     );
 
-    if (res.ok) {
-      toast({ title: "Saved", description: "Service saved successfully" });
-      navigate("/admin/services");
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      toast({ 
+        title: "Error", 
+        description: errorData.error || "Failed to save service",
+        variant: "destructive"
+      });
+      return;
     }
+
+    toast({ title: "Saved", description: "Service saved successfully" });
+    navigate("/admin/services");
   };
 
   /* ---------------- UI ---------------- */

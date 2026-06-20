@@ -137,5 +137,55 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background-image: radial-gradient(hsl(var(--foreground)/0.05) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
+
+@layer utilities {
+  .hover-lift-card {
+    @apply transition-all duration-300 ease-out;
+  }
+  .hover-lift-card:hover {
+    @apply -translate-y-1 scale-[1.01];
+    box-shadow: 8px 8px 0px 0px hsl(var(--foreground));
+  }
+  
+  .icon-rotate-hover {
+    @apply transition-transform duration-300 ease-out;
+  }
+  *:hover > .icon-rotate-hover {
+    @apply rotate-12 scale-110;
+  }
+  
+  .btn-arrow-hover .arrow-icon {
+    @apply transition-transform duration-300 ease-out inline-block;
+  }
+  .btn-arrow-hover:hover .arrow-icon {
+    @apply translate-x-1;
+  }
+  
+  .input-focus-animate {
+    @apply transition-all duration-300 ease-out outline-none focus:ring-2 focus:ring-ring focus:border-ring;
+  }
+  
+  .bg-typography {
+    @apply absolute -z-10 font-bold opacity-5 pointer-events-none whitespace-nowrap overflow-hidden leading-none;
+  }
+
+  .whatsapp-pulse {
+    animation: whatsapp-pulse 2s infinite;
+  }
+
+  @keyframes whatsapp-pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4);
+    }
+    70% {
+      box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
   }
 }

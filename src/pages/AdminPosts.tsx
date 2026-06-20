@@ -41,6 +41,7 @@ interface BlogPost {
   category: string;
   published: boolean;
   createdAt: string;
+  imageUrl: string | null;
 }
 
 const AdminPosts = () => {
@@ -164,6 +165,7 @@ const AdminPosts = () => {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted">
+                  <TableHead className="w-[100px]">Image</TableHead>
                   <TableHead>Title</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Status</TableHead>
@@ -174,6 +176,21 @@ const AdminPosts = () => {
               <TableBody>
                 {posts.map((post) => (
                   <TableRow key={post.id}>
+                    <TableCell>
+                      {post.imageUrl ? (
+                        <div className="w-16 h-10 overflow-hidden border-2 border-foreground bg-muted">
+                          <img
+                            src={post.imageUrl}
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-16 h-10 border-2 border-foreground bg-muted flex items-center justify-center text-xs text-muted-foreground">
+                          None
+                        </div>
+                      )}
+                    </TableCell>
                     <TableCell className="font-medium">
                       {post.title}
                     </TableCell>

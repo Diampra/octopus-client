@@ -39,62 +39,88 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <section className="py-16 md:py-24 bg-background">
-      <div className="container mx-auto px-4">
+    <section className="py-24 bg-background overflow-hidden relative">
+      <div className="container mx-auto px-4 relative z-10">
+        
         {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <span className="inline-block bg-primary text-primary-foreground px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 border-2 border-foreground shadow-sm">
-            Our Services
-          </span>
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            What We <span className="text-primary">Offer</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            From business cards to large format prints, we deliver quality printing and creative design solutions.
-          </p>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="max-w-2xl">
+            <span className="inline-block text-primary font-mono text-sm uppercase tracking-widest mb-4">
+              [ 01 / Expertise ]
+            </span>
+            <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-tighter leading-none">
+              What We <span className="text-primary italic font-serif lowercase">offer</span>
+            </h2>
+          </div>
+          <Button variant="outline" size="lg" className="border-2 border-foreground hover:bg-foreground hover:text-background transition-all shrink-0" asChild>
+            <Link to="/services">
+              View All Services
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Link>
+          </Button>
         </div>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => {
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[250px]">
+          {services.map((service, index) => {
             const Icon = ICON_MAP[service.icon] ?? CreditCard;
+            
+            // Bento Grid Logic
+            // 0: Large (2x2)
+            // 1: Wide (2x1)
+            // 2: Tall (1x2)
+            // Others: Normal (1x1 or 2x1 based on remaining)
+            
+            let gridClasses = "col-span-1 row-span-1";
+            let bgClass = "bg-card text-card-foreground";
+            let iconBgClass = "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground";
+            
+            if (index === 0) {
+              gridClasses = "md:col-span-2 lg:col-span-2 row-span-2";
+              bgClass = "bg-foreground text-background";
+              iconBgClass = "bg-secondary text-secondary-foreground";
+            } else if (index === 1) {
+              gridClasses = "md:col-span-1 lg:col-span-2 row-span-1";
+              bgClass = "bg-primary text-primary-foreground";
+              iconBgClass = "bg-background/20 text-background";
+            } else if (index === 2) {
+              gridClasses = "md:col-span-1 lg:col-span-1 row-span-2";
+              bgClass = "bg-secondary text-secondary-foreground";
+              iconBgClass = "bg-background/20 text-background group-hover:bg-background group-hover:text-secondary";
+            } else if (index === 3) {
+              gridClasses = "md:col-span-2 lg:col-span-1 row-span-1";
+            } else if (index === 4) {
+               gridClasses = "md:col-span-1 lg:col-span-2 row-span-1";
+            }
 
             return (
               <div
                 key={service.id}
-                className="group bg-card border-2 border-foreground p-6 shadow-sm hover:shadow-md hover:translate-x-[-2px] hover:translate-y-[-2px] transition-all"
+                className={`group border-2 border-foreground p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between ${gridClasses} ${bgClass}`}
               >
-                <div className="w-14 h-14 bg-primary/10 border-2 border-foreground flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                  <Icon className="w-7 h-7" />
+                <div>
+                  <div className={`w-14 h-14 border-2 border-current flex items-center justify-center mb-6 transition-colors ${iconBgClass}`}>
+                    <Icon className="w-6 h-6" />
+                  </div>
+
+                  <h3 className={`font-bold mb-3 ${index === 0 ? 'text-4xl' : 'text-2xl'}`}>
+                    {service.title}
+                  </h3>
+
+                  <p className={`opacity-80 line-clamp-3 ${index === 0 ? 'text-lg max-w-md' : 'text-sm'}`}>
+                    {service.description}
+                  </p>
                 </div>
-
-                <h3 className="text-xl font-bold mb-2">
-                  {service.title}
-                </h3>
-
-                <p className="text-muted-foreground mb-4">
-                  {service.description}
-                </p>
 
                 <Link
                   to="/services"
-                  className="inline-flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all"
+                  className="inline-flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-wider hover:gap-4 transition-all mt-6"
                 >
                   Learn More <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             );
           })}
-        </div>
-
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <Button variant="default" size="lg" asChild>
-            <Link to="/services">
-              View All Services
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </Button>
         </div>
       </div>
     </section>

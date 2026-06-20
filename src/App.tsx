@@ -33,6 +33,7 @@ import TermsOfService from "./pages/TermsOfService";
 import DMCA from "./pages/DMCA";
 import AdminMediaGallery from "./pages/media/AdminMediaGallery";
 import ScrollToTop from "./components/ScrollToTop";
+import StickyWhatsApp from "./components/layout/StickyWhatsApp";
 
 
 const queryClient = new QueryClient();
@@ -83,7 +84,7 @@ const App = () => (
           <Route path="/dmca" element={<DMCA />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-
+      <StickyWhatsApp />
     </TooltipProvider>
   </QueryClientProvider>
 );

@@ -5,74 +5,79 @@ import heroBg from "@/assets/hero-bg.jpg";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 md:pt-20">
-      {/* Background Image */}
-      <div 
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url(${heroBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        <div className="absolute inset-0 bg-foreground/70" />
-      </div>
-
-      {/* Content */}
-      <div className="container mx-auto px-4 relative z-10 py-20">
-        <div className="max-w-4xl">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-background border-2 border-foreground px-4 py-2 mb-6 shadow-sm">
-            <Sparkles className="w-4 h-4 text-primary" />
-            <span className="font-medium text-sm uppercase tracking-wider">Premium Printing Services</span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-background mb-6 leading-tight">
-            Creative Printing &
-            <span className="block text-secondary">Branding Solutions</span>
-          </h1>
-
-          {/* Subheadline */}
-          <p className="text-xl md:text-2xl text-background/90 mb-8 max-w-2xl">
-            Cards, Banners, UV, Acrylic & More! Transform your brand identity with our professional printing and design services.
-          </p>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button variant="hero" size="xl" asChild>
-              <Link to="/contact">
-                Get a Quote
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-            </Button>
-            <Button variant="heroOutline" size="xl" asChild>
-              <Link to="/portfolio">
-                View Portfolio
-              </Link>
-            </Button>
-          </div>
-
-          {/* Stats */}
-          <div className="grid grid-cols-3 gap-4 md:gap-8 mt-12 md:mt-16 max-w-xl">
-            <div className="bg-background/10 backdrop-blur-sm border-2 border-background/30 p-4 text-center">
-              <span className="block text-3xl md:text-4xl font-bold text-secondary">500+</span>
-              <span className="text-background/80 text-sm uppercase tracking-wider">Projects</span>
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden pt-24 md:pt-32 pb-16">
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          
+          {/* Left / Editorial Text */}
+          <div className="lg:col-span-8">
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-secondary text-secondary-foreground border-2 border-foreground px-4 py-2 mb-8 shadow-sm">
+              <Sparkles className="w-4 h-4" />
+              <span className="font-bold text-sm uppercase tracking-widest">Premium Agency</span>
             </div>
-            <div className="bg-background/10 backdrop-blur-sm border-2 border-background/30 p-4 text-center">
-              <span className="block text-3xl md:text-4xl font-bold text-secondary">10+</span>
-              <span className="text-background/80 text-sm uppercase tracking-wider">Years</span>
-            </div>
-            <div className="bg-background/10 backdrop-blur-sm border-2 border-background/30 p-4 text-center">
-              <span className="block text-3xl md:text-4xl font-bold text-secondary">100%</span>
-              <span className="text-background/80 text-sm uppercase tracking-wider">Quality</span>
+
+            {/* Headline */}
+            <h1 className="text-5xl md:text-7xl lg:text-[7rem] font-bold text-foreground leading-[0.9] tracking-tighter mb-8 uppercase">
+              Printing & <br />
+              <span className="font-serif italic lowercase text-primary font-normal">branding</span> <br />
+              Solutions
+            </h1>
+
+            {/* Subheadline & CTA */}
+            <div className="flex flex-col md:flex-row gap-8 md:items-center max-w-3xl">
+              <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed flex-1 font-medium">
+                We transform your brand identity with high-end printing, bespoke design, and meticulous attention to detail.
+              </p>
+              
+              <div className="flex flex-col gap-4 min-w-[200px]">
+                <Button variant="default" size="xl" className="w-full text-lg shadow-sm border-2 border-foreground hover:-translate-y-1 hover:shadow-md transition-all btn-arrow-hover" asChild>
+                  <Link to="/contact">
+                    Start Project
+                    <ArrowRight className="w-5 h-5 ml-2 arrow-icon" />
+                  </Link>
+                </Button>
+                <Button variant="outline" size="xl" className="w-full text-lg shadow-sm hover:-translate-y-1 hover:shadow-md transition-all" asChild>
+                  <Link to="/portfolio">
+                    View Work
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
+
+          {/* Right / Accent Images & Stats */}
+          <div className="lg:col-span-4 flex flex-col gap-6 mt-12 lg:mt-0">
+            <div className="relative aspect-[4/5] border-2 border-foreground overflow-hidden bg-muted shadow-sm hover:shadow-md transition-shadow group">
+              <img 
+                src={heroBg} 
+                alt="Creative Printing" 
+                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100"
+              />
+              <div className="absolute inset-0 bg-primary/20 mix-blend-multiply group-hover:opacity-0 transition-opacity duration-700" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-foreground text-background border-2 border-foreground p-6 text-center hover:bg-secondary hover:text-secondary-foreground transition-colors cursor-default">
+                <span className="block text-4xl font-bold mb-1">500+</span>
+                <span className="text-xs uppercase tracking-widest font-medium opacity-80">Projects</span>
+              </div>
+              <div className="bg-background text-foreground border-2 border-foreground p-6 text-center hover:bg-primary hover:text-primary-foreground transition-colors cursor-default">
+                <span className="block text-4xl font-bold mb-1">10+</span>
+                <span className="text-xs uppercase tracking-widest font-medium opacity-80">Years</span>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute bottom-0 left-0 right-0 h-4 bg-secondary" />
+      {/* Background oversized word */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 -z-10 w-full overflow-hidden pointer-events-none select-none opacity-[0.03]">
+        <span className="text-[20vw] font-black uppercase whitespace-nowrap leading-none tracking-tighter">
+          CREATIVE
+        </span>
+      </div>
     </section>
   );
 };
