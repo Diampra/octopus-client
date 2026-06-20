@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { apiUrl } from "@/constants/constants";
-
 import {
-  CreditCard,
-  FileText,
-  Presentation,
-  Palette,
-  Tag,
-  Layers,
-  Megaphone,
-  Package,
+  CreditCard, FileText, Presentation, Palette, Tag, Layers, Megaphone, Package,
 } from "lucide-react";
 
 const iconMap: Record<string, any> = {
@@ -41,6 +32,8 @@ type Service = {
 export default function Services() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     fetch(`${apiUrl}/services`)
@@ -49,154 +42,255 @@ export default function Services() {
       .finally(() => setLoading(false));
   }, []);
 
+  // IntersectionObserver — update active on scroll
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    itemRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting && entry.intersectionRatio >= 0.4) setActiveIndex(i); },
+        { threshold: 0.4 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, [services]);
+
+  const active = services[activeIndex];
+  const ActiveIcon = active ? (iconMap[active.icon] ?? Layers) : Layers;
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
       <main className="pt-16 md:pt-20">
-        {/* HERO */}
-        <section className="bg-background border-b-2 border-foreground py-24 md:py-32 relative overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-full text-center pointer-events-none select-none opacity-[0.03]">
-            <span className="text-[25vw] font-black uppercase tracking-tighter leading-none text-foreground">
+
+        {/* ── PAGE HERO ── */}
+        <section className="bg-foreground text-background py-24 relative overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+            <span className="text-[20vw] font-black uppercase tracking-tighter leading-none text-background/[0.03] whitespace-nowrap">
               EXPERTISE
             </span>
           </div>
-
-          <div className="container mx-auto px-4 text-center">
-            <span className="inline-block bg-primary text-primary-foreground px-4 py-2 text-sm font-bold uppercase border-2 border-foreground mb-8">
-              Our Services
+          <div className="container mx-auto px-4 relative z-10">
+            <span className="inline-block bg-primary text-primary-foreground px-4 py-2 text-xs font-bold uppercase tracking-wider mb-6 border-2 border-background">
+              [ Services / What We Do ]
             </span>
-            <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-bold uppercase tracking-tighter leading-none mb-6">
-              Printing & Design <br />
-              <span className="text-primary italic font-serif lowercase">Solutions</span>
+            <h1 className="text-5xl md:text-7xl lg:text-[6rem] font-bold uppercase tracking-tighter leading-[0.9] mb-6">
+              Printing & <br />
+              <span className="font-serif italic lowercase font-normal text-primary">design</span> <br />
+              Solutions
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto font-medium">
-              We deliver high-end printing and creative design services that help your brand stand out from the noise.
+            <p className="text-background/70 text-xl max-w-xl font-medium">
+              High-end printing and creative design services that help your brand stand out from the noise.
             </p>
           </div>
         </section>
 
-        {/* SERVICES SHOWCASE */}
-        <section className="py-16 md:py-24">
-          <div className="container mx-auto px-4 space-y-24 md:space-y-40">
-            {loading && (
-              <div className="space-y-16 md:space-y-24">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center animate-pulse">
-                    <div>
-                      <div className="w-14 h-14 bg-muted mb-4" />
-                      <div className="h-8 bg-muted w-2/3 mb-4" />
-                      <div className="h-4 bg-muted w-full mb-2" />
-                      <div className="h-4 bg-muted w-5/6 mb-6" />
+        {/* ── STICKY LEFT + SCROLL RIGHT ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12">
+
+          {/* Sticky Left — active service detail */}
+          <div className="hidden lg:block lg:col-span-4 relative border-r border-border">
+            <div className="sticky top-[4rem] h-[calc(100vh-4rem)] flex flex-col justify-between px-8 xl:px-12 py-12 overflow-hidden">
+
+              {/* Ghost word */}
+              <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
+                <span className="text-[10vw] font-black uppercase tracking-tighter leading-none text-foreground/[0.025] whitespace-nowrap">
+                  SERVICE
+                </span>
+              </div>
+
+              <div className="relative z-10 flex flex-col h-full">
+                {active ? (
+                  <div key={active.id} className="animate-fade-in flex flex-col h-full">
+                    {/* Service image */}
+                    <div className="aspect-[4/3] w-full overflow-hidden mb-6 bg-muted relative group">
+                      <img
+                        src={active.imageUrl}
+                        alt={active.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-foreground/15" />
                     </div>
-                    <div className="h-[400px] bg-muted" />
+
+                    {/* Icon + counter */}
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 border-2 border-foreground flex items-center justify-center bg-muted">
+                        <ActiveIcon className="w-4 h-4" />
+                      </div>
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                        {String(activeIndex + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")}
+                      </span>
+                    </div>
+
+                    <h2 className="text-2xl font-bold tracking-tight mb-3 uppercase leading-tight">{active.title}</h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-6 flex-grow line-clamp-4">
+                      {active.description}
+                    </p>
+
+                    {/* Features */}
+                    <div className="flex flex-wrap gap-2 mb-8">
+                      {active.features.slice(0, 4).map((f, i) => (
+                        <span key={i} className="bg-muted text-foreground font-mono px-2 py-1 text-[9px] font-bold uppercase tracking-widest">
+                          {f}
+                        </span>
+                      ))}
+                      {active.features.length > 4 && (
+                        <span className="text-muted-foreground font-mono text-[9px] font-bold uppercase tracking-widest px-1 py-1">
+                          +{active.features.length - 4} more
+                        </span>
+                      )}
+                    </div>
+
+                    <Link
+                      to="/contact"
+                      className="inline-flex items-center gap-2 bg-foreground text-background px-5 py-3 text-xs font-bold uppercase tracking-wider hover:bg-foreground/90 transition-colors w-fit group"
+                    >
+                      Request Quote
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                    </Link>
                   </div>
+                ) : (
+                  <div className="flex-1 flex items-center justify-center text-muted-foreground font-mono text-xs uppercase tracking-widest">
+                    Loading services...
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Scrollable Right — service rows */}
+          <div className="lg:col-span-8">
+            {loading && services.length === 0 ? (
+              <div className="space-y-px bg-border">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="h-32 bg-background animate-pulse" />
                 ))}
               </div>
-            )}
+            ) : (
+              <>
+                {services.map((service, i) => {
+                  const Icon = iconMap[service.icon] ?? Layers;
+                  const isActive = i === activeIndex;
 
-            {services.map((service, index) => {
-              const Icon = iconMap[service.icon] ?? Layers;
-              const isEven = index % 2 === 0;
+                  return (
+                    <div
+                      key={service.id}
+                      id={service.slug}
+                      ref={(el) => { itemRefs.current[i] = el; }}
+                      onClick={() => setActiveIndex(i)}
+                      className={`group cursor-pointer border-b border-border transition-colors duration-300 ${
+                        isActive ? "bg-foreground text-background" : "hover:bg-muted/30"
+                      }`}
+                    >
+                      {/* Image + text row */}
+                      <div className="flex items-stretch">
+                        {/* Image thumbnail */}
+                        <div className="w-32 md:w-48 shrink-0 overflow-hidden relative">
+                          <img
+                            src={service.imageUrl}
+                            alt={service.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                          />
+                          <div className={`absolute inset-0 transition-colors ${isActive ? "bg-foreground/30" : "bg-foreground/10"}`} />
+                        </div>
 
-              return (
-                <div
-                  key={service.id}
-                  id={service.slug}
-                  className={`flex flex-col lg:flex-row gap-12 lg:gap-24 items-center ${
-                    !isEven ? "lg:flex-row-reverse" : ""
-                  }`}
-                >
-                  {/* TEXT */}
-                  <div className="w-full lg:w-1/2 relative">
-                    {/* Massive Background Number */}
-                    <div className="absolute -top-16 -left-8 text-[12rem] font-black text-foreground opacity-5 pointer-events-none select-none z-0">
-                      0{index + 1}
-                    </div>
-
-                    <div className="relative z-10">
-                      <div className="w-16 h-16 bg-background border-4 border-foreground text-foreground flex items-center justify-center mb-8">
-                        <Icon className="w-8 h-8" />
-                      </div>
-
-                      <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tighter uppercase leading-none">
-                        {service.title}
-                      </h2>
-
-                      <p className="text-muted-foreground text-xl mb-8 leading-relaxed font-medium">
-                        {service.description}
-                      </p>
-
-                      <div className="flex flex-wrap gap-3 mb-10">
-                        {service.features.map((f, i) => (
-                          <div
-                            key={i}
-                            className="bg-accent border-2 border-foreground px-4 py-2 text-sm font-bold uppercase tracking-wider"
-                          >
-                            {f}
+                        {/* Content */}
+                        <div className="flex-1 px-6 md:px-8 py-7 flex flex-col justify-between">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <div className="flex items-center gap-3 mb-3">
+                                <div className={`w-8 h-8 border flex items-center justify-center transition-colors ${
+                                  isActive ? "border-background/40 text-background" : "border-foreground/20 text-foreground"
+                                }`}>
+                                  <Icon className="w-3.5 h-3.5" />
+                                </div>
+                                <span className={`font-mono text-[10px] uppercase tracking-widest ${isActive ? "text-background/50" : "text-muted-foreground"}`}>
+                                  0{i + 1} / {String(services.length).padStart(2, "0")}
+                                </span>
+                              </div>
+                              <h2 className="text-xl font-bold tracking-tight uppercase mb-2 leading-none">{service.title}</h2>
+                              <p className={`text-sm leading-relaxed line-clamp-2 ${isActive ? "text-background/70" : "text-muted-foreground"}`}>
+                                {service.description}
+                              </p>
+                            </div>
+                            <ArrowRight className={`w-5 h-5 shrink-0 mt-1 transition-transform group-hover:translate-x-1 ${isActive ? "text-primary" : "text-foreground/15"}`} />
                           </div>
-                        ))}
+
+                          {/* Feature tags */}
+                          <div className="flex flex-wrap gap-1.5 mt-4">
+                            {service.features.slice(0, 3).map((f, fi) => (
+                              <span key={fi} className={`font-mono px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest transition-colors ${
+                                isActive ? "bg-background/10 text-background" : "bg-muted text-muted-foreground"
+                              }`}>
+                                {f}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-
-                      <Button variant="default" size="xl" className="border-2 border-foreground shadow-sm hover:shadow-md transition-all text-lg btn-arrow-hover" asChild>
-                        <Link to="/contact">
-                          Request Quote <ArrowRight className="w-5 h-5 ml-2 arrow-icon" />
-                        </Link>
-                      </Button>
                     </div>
-                  </div>
+                  );
+                })}
 
-                  {/* IMAGE */}
-                  <div className="w-full lg:w-1/2">
-                    <div className="border-4 border-foreground overflow-hidden shadow-sm hover:shadow-md transition-shadow group relative bg-muted aspect-[4/5] md:aspect-square">
-                      <img
-                        src={service.imageUrl}
-                        alt={service.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      />
-                      {/* Overlay */}
-                      <div className="absolute inset-0 bg-primary/20 mix-blend-multiply opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    </div>
-                  </div>
+                {/* Bottom CTA row */}
+                <div className="px-8 py-8 border-t border-border flex items-center justify-between bg-muted/10">
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    {services.length} services available
+                  </span>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-2 bg-foreground text-background px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-foreground/90 transition-colors group"
+                  >
+                    Get a Quote <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </div>
-              );
-            })}
+              </>
+            )}
           </div>
-        </section>
 
-        {/* CTA */}
-        <section className="py-24 bg-foreground text-background text-center relative overflow-hidden">
-          {/* Background oversized word */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-full text-center pointer-events-none select-none opacity-[0.03]">
-            <span className="text-[20vw] font-black uppercase tracking-tighter leading-none text-background">
+        </div>
+
+        {/* ── BOTTOM CTA ── */}
+        <section className="py-24 bg-foreground text-background relative overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+            <span className="text-[18vw] font-black uppercase tracking-tighter leading-none text-background/[0.03] whitespace-nowrap">
               READY
             </span>
           </div>
-
-          <div className="container mx-auto px-4 relative z-10">
-            <h2 className="text-5xl md:text-7xl font-bold uppercase tracking-tighter leading-none mb-6">
-              Start Your <span className="text-secondary italic font-serif lowercase">Project</span>
-            </h2>
-            <p className="text-xl text-background/80 mb-12 max-w-2xl mx-auto font-medium">
-              Contact us today for a free consultation and quote. Let's build something exceptional together.
-            </p>
-            <Button
-              variant="default"
-              size="xl"
-              className="bg-secondary text-secondary-foreground hover:bg-background hover:text-foreground border-2 border-secondary hover:border-foreground transition-colors text-xl btn-arrow-hover px-12"
-              asChild
+          <div className="container mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h2 className="text-4xl md:text-6xl font-bold uppercase tracking-tighter leading-none mb-4">
+                Start Your <span className="text-primary italic font-serif lowercase">project</span>
+              </h2>
+              <p className="text-background/70 text-lg max-w-md font-medium">
+                Contact us today for a free consultation and quote. Let's build something exceptional together.
+              </p>
+            </div>
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-3 bg-background text-foreground px-8 py-4 text-sm font-bold uppercase tracking-wider hover:bg-background/90 transition-colors shrink-0 group"
             >
-              <Link to="/contact">
-                Contact Us Now <ArrowRight className="w-6 h-6 ml-2 arrow-icon" />
-              </Link>
-            </Button>
+              Contact Us Now
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </section>
+
       </main>
 
       <Footer />
+
+      <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+      `}</style>
     </div>
   );
 }

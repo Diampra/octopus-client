@@ -1,13 +1,6 @@
-import { useEffect, useState } from "react";
-import { Star, Quote, UserCircle } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Star, Quote, UserCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { apiUrl } from "@/constants/constants";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 type Testimonial = {
   id: string;
@@ -20,6 +13,8 @@ type Testimonial = {
 const TestimonialsSection = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
     fetch(`${apiUrl}/testimonials/featured`)
@@ -29,74 +24,238 @@ const TestimonialsSection = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return null;
-  if (testimonials.length === 0) return null;
+  // IntersectionObserver — sync active on desktop scroll
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    itemRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) setActiveIndex(i);
+        },
+        { threshold: 0.5 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, [testimonials]);
+
+  const goTo = (i: number) => {
+    const next = (i + testimonials.length) % testimonials.length;
+    setActiveIndex(next);
+    itemRefs.current[next]?.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+  if (loading || testimonials.length === 0) return null;
+
+  const active = testimonials[activeIndex];
 
   return (
-    <section className="py-16 md:py-24 bg-accent relative overflow-hidden">
-      <div className="bg-typography text-9xl top-10 left-[-10%] text-foreground/5">TESTIMONIALS</div>
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-12 md:mb-16">
-          <span className="inline-block bg-secondary text-secondary-foreground px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 border-2 border-foreground shadow-sm hover-lift-card">
-            Testimonials
-          </span>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6">
-            What Our <span className="text-secondary">Clients Say</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Don&apos;t just take our word for it - hear from our satisfied customers who trust us with their premium printing and branding needs.
-          </p>
-        </div>
+    <section className="bg-background relative overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12">
 
-        {/* Interactive Carousel */}
-        <div className="px-12 md:px-20 max-w-6xl mx-auto">
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent className="-ml-4 md:-ml-6">
-              {testimonials.map((testimonial) => (
-                <CarouselItem key={testimonial.id} className="pl-4 md:pl-6 md:basis-1/2 lg:basis-1/3">
-                  <div className="bg-background border-2 border-foreground p-8 shadow-sm h-full flex flex-col relative group hover-lift-card">
-                    <Quote className="w-12 h-12 text-secondary/10 absolute top-4 right-4 transition-transform duration-500 group-hover:scale-125 group-hover:text-secondary/20" />
+        {/* ── STICKY LEFT — section header + active testimonial large view ── */}
+        <div className="lg:col-span-5 relative">
+          <div className="sticky top-0 h-auto lg:h-screen flex flex-col justify-center px-6 xl:px-16 py-16 lg:py-24 overflow-hidden">
 
-                    <div className="flex gap-1 mb-6">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star
+            {/* Ghost word */}
+            <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
+              <span className="text-[13vw] font-black uppercase tracking-tighter leading-none text-foreground/[0.03] whitespace-nowrap">
+                CLIENTS
+              </span>
+            </div>
+
+            <div className="relative z-10">
+              {/* Label */}
+              <span className="inline-block bg-secondary text-secondary-foreground px-4 py-2 text-xs font-bold uppercase tracking-wider mb-6 border-2 border-secondary">
+                [ 05 / Client Voices ]
+              </span>
+
+              {/* Section headline */}
+              <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-tighter leading-[0.9] mb-8">
+                What Our <br />
+                <span className="font-serif italic lowercase font-normal text-secondary">
+                  clients say
+                </span>
+              </h2>
+
+              <div className="w-12 h-px bg-foreground/20 mb-8" />
+
+              {/* Active testimonial — large quote on left */}
+              {active && (
+                <div key={active.id} className="animate-fade-in">
+                  {/* Stars */}
+                  <div className="flex gap-1 mb-5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 transition-colors ${
+                          i < active.rating
+                            ? "fill-secondary text-secondary"
+                            : "text-foreground/10"
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Large quote mark */}
+                  <Quote className="w-10 h-10 text-secondary/20 mb-4" />
+
+                  {/* Quote text */}
+                  <p className="font-serif text-xl italic leading-relaxed text-foreground mb-8 max-w-sm">
+                    "{active.content}"
+                  </p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-4 mb-10">
+                    <div className="w-12 h-12 rounded-full border-2 border-secondary flex items-center justify-center bg-muted overflow-hidden">
+                      <UserCircle className="w-10 h-10 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-base leading-tight">{active.name}</p>
+                      <p className="text-xs text-secondary font-mono uppercase tracking-widest mt-0.5">
+                        {active.role}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Navigation */}
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => goTo(activeIndex - 1)}
+                      className="w-9 h-9 border-2 border-foreground/20 hover:border-foreground flex items-center justify-center transition-colors"
+                      aria-label="Previous"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+
+                    <div className="flex gap-2">
+                      {testimonials.map((_, i) => (
+                        <button
                           key={i}
-                          className="w-5 h-5 fill-secondary text-secondary"
+                          onClick={() => goTo(i)}
+                          className={`transition-all duration-300 rounded-full ${
+                            i === activeIndex
+                              ? "w-6 h-2 bg-secondary"
+                              : "w-2 h-2 bg-foreground/20 hover:bg-foreground/40"
+                          }`}
+                          aria-label={`Testimonial ${i + 1}`}
                         />
                       ))}
                     </div>
 
-                    <p className="text-foreground/90 font-medium mb-8 flex-grow text-lg italic relative z-10">
-                      "{testimonial.content}"
-                    </p>
+                    <button
+                      onClick={() => goTo(activeIndex + 1)}
+                      className="w-9 h-9 border-2 border-foreground/20 hover:border-foreground flex items-center justify-center transition-colors"
+                      aria-label="Next"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
 
-                    <div className="flex items-center gap-4 mt-auto pt-4 border-t-2 border-foreground/10">
-                      <div className="w-12 h-12 bg-accent rounded-full border-2 border-foreground flex items-center justify-center overflow-hidden">
-                        <UserCircle className="w-8 h-8 text-muted-foreground" />
-                      </div>
-                      <div>
-                        <p className="font-bold text-lg leading-tight">{testimonial.name}</p>
-                        <p className="text-sm text-secondary font-medium uppercase tracking-wider">
-                          {testimonial.role}
-                        </p>
-                      </div>
-                    </div>
+                    <span className="ml-auto font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {String(activeIndex + 1).padStart(2, "0")} / {String(testimonials.length).padStart(2, "0")}
+                    </span>
                   </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="w-12 h-12 border-2 border-foreground hover:bg-secondary hover:text-secondary-foreground hidden sm:flex -left-16" />
-            <CarouselNext className="w-12 h-12 border-2 border-foreground hover:bg-secondary hover:text-secondary-foreground hidden sm:flex -right-16" />
-          </Carousel>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
+
+        {/* ── SCROLLABLE RIGHT — testimonial rows ── */}
+        <div className="lg:col-span-7 border-l border-border">
+          {testimonials.map((t, i) => {
+            const isActive = i === activeIndex;
+            return (
+              <div
+                key={t.id}
+                ref={(el) => { itemRefs.current[i] = el; }}
+                onClick={() => setActiveIndex(i)}
+                className={`group cursor-pointer border-b border-border px-8 py-10 flex flex-col gap-5 transition-colors duration-300 ${
+                  isActive ? "bg-secondary/5" : "hover:bg-muted/30"
+                }`}
+              >
+                {/* Top row: stars + counter + role */}
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, si) => (
+                      <Star
+                        key={si}
+                        className={`w-3.5 h-3.5 transition-colors ${
+                          si < t.rating
+                            ? "fill-secondary text-secondary"
+                            : "text-foreground/10"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                    0{i + 1}
+                  </span>
+                </div>
+
+                {/* Quote */}
+                <p
+                  className={`font-serif italic leading-relaxed line-clamp-3 text-base transition-colors ${
+                    isActive
+                      ? "text-foreground"
+                      : "text-muted-foreground group-hover:text-foreground"
+                  }`}
+                >
+                  "{t.content}"
+                </p>
+
+                {/* Author row */}
+                <div className="flex items-center gap-3 pt-2 border-t border-border">
+                  <div
+                    className={`w-9 h-9 rounded-full flex items-center justify-center overflow-hidden transition-colors ${
+                      isActive ? "bg-secondary/20" : "bg-muted"
+                    }`}
+                  >
+                    <UserCircle
+                      className={`w-7 h-7 ${
+                        isActive ? "text-secondary" : "text-muted-foreground"
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm leading-tight">{t.name}</p>
+                    <p
+                      className={`text-[10px] font-mono uppercase tracking-widest mt-0.5 ${
+                        isActive ? "text-secondary" : "text-muted-foreground"
+                      }`}
+                    >
+                      {t.role}
+                    </p>
+                  </div>
+
+                  {/* Active indicator */}
+                  {isActive && (
+                    <div className="ml-auto w-2 h-2 rounded-full bg-secondary animate-pulse" />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Bottom tag line */}
+          <div className="px-8 py-6 bg-muted/20 border-t border-border">
+            <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              Trusted by {testimonials.length}+ happy clients — and counting.
+            </p>
+          </div>
+        </div>
+
       </div>
+
+      <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+      `}</style>
     </section>
   );
 };

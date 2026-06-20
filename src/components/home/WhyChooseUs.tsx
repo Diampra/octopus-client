@@ -25,20 +25,21 @@ const features = [
 
 const WhyChooseUs = () => {
   return (
-    <section className="py-24 bg-foreground text-background relative overflow-hidden z-0">
+    <section className="py-24 bg-foreground text-background relative z-0">
       {/* Massive Background Typography */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-full text-center pointer-events-none select-none opacity-[0.03]">
-        <span className="text-[25vw] font-black uppercase tracking-tighter leading-none text-background">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-full overflow-hidden text-center pointer-events-none select-none opacity-[0.03]">
+        <span className="text-[25vw] font-black uppercase tracking-tighter leading-none text-background whitespace-nowrap">
           ADVANTAGE
         </span>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
           
           {/* Header Column */}
-          <div className="lg:col-span-5 sticky top-24">
-            <span className="inline-block text-secondary font-mono text-sm uppercase tracking-widest mb-4">
+          <div className="lg:col-span-5 relative">
+            <div className="sticky top-32 self-start">
+            <span className="inline-block bg-secondary text-secondary-foreground px-4 py-2 text-sm font-bold uppercase tracking-wider mb-4 border-2 border-background shadow-sm hover-lift-card">
               [ 02 / Why Us ]
             </span>
             <h2 className="text-5xl md:text-7xl font-bold uppercase tracking-tighter leading-[0.9] mb-8">
@@ -48,6 +49,7 @@ const WhyChooseUs = () => {
             <p className="text-xl text-background/80 leading-relaxed font-medium">
               We're not just printers — we're your creative partners in building a memorable brand. Here's why top agencies and businesses choose us.
             </p>
+            </div>
           </div>
 
           {/* Features Editorial List */}

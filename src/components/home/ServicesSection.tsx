@@ -9,7 +9,6 @@ import {
   Layers,
   ArrowRight,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { apiUrl } from "@/constants/constants";
 
 type Service = {
@@ -30,6 +29,7 @@ const ICON_MAP: Record<string, any> = {
 
 const ServicesSection = () => {
   const [services, setServices] = useState<Service[]>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     fetch(`${apiUrl}/services/featured`)
@@ -38,91 +38,164 @@ const ServicesSection = () => {
       .catch(console.error);
   }, []);
 
+  if (!services.length) return null;
+
+  const active = services[activeIndex];
+  const ActiveIcon = ICON_MAP[active?.icon] ?? CreditCard;
+
   return (
-    <section className="py-24 bg-background overflow-hidden relative">
-      <div className="container mx-auto px-4 relative z-10">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div className="max-w-2xl">
-            <span className="inline-block text-primary font-mono text-sm uppercase tracking-widest mb-4">
-              [ 01 / Expertise ]
-            </span>
-            <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-tighter leading-none">
-              What We <span className="text-primary italic font-serif lowercase">offer</span>
-            </h2>
-          </div>
-          <Button variant="outline" size="lg" className="border-2 border-foreground hover:bg-foreground hover:text-background transition-all shrink-0" asChild>
-            <Link to="/services">
-              View All Services
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Link>
-          </Button>
-        </div>
+    <section className="bg-background relative overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-12">
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[250px]">
-          {services.map((service, index) => {
-            const Icon = ICON_MAP[service.icon] ?? CreditCard;
-            
-            // Bento Grid Logic
-            // 0: Large (2x2)
-            // 1: Wide (2x1)
-            // 2: Tall (1x2)
-            // Others: Normal (1x1 or 2x1 based on remaining)
-            
-            let gridClasses = "col-span-1 row-span-1";
-            let bgClass = "bg-card text-card-foreground";
-            let iconBgClass = "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground";
-            
-            if (index === 0) {
-              gridClasses = "md:col-span-2 lg:col-span-2 row-span-2";
-              bgClass = "bg-foreground text-background";
-              iconBgClass = "bg-secondary text-secondary-foreground";
-            } else if (index === 1) {
-              gridClasses = "md:col-span-1 lg:col-span-2 row-span-1";
-              bgClass = "bg-primary text-primary-foreground";
-              iconBgClass = "bg-background/20 text-background";
-            } else if (index === 2) {
-              gridClasses = "md:col-span-1 lg:col-span-1 row-span-2";
-              bgClass = "bg-secondary text-secondary-foreground";
-              iconBgClass = "bg-background/20 text-background group-hover:bg-background group-hover:text-secondary";
-            } else if (index === 3) {
-              gridClasses = "md:col-span-2 lg:col-span-1 row-span-1";
-            } else if (index === 4) {
-               gridClasses = "md:col-span-1 lg:col-span-2 row-span-1";
-            }
+        {/* ── STICKY LEFT — header + active service detail ── */}
+        <div className="lg:col-span-5 relative">
+          <div className="sticky top-0 h-auto lg:h-screen flex flex-col justify-center px-6 xl:px-16 py-16 lg:py-24 overflow-hidden">
 
-            return (
-              <div
-                key={service.id}
-                className={`group border-2 border-foreground p-8 shadow-sm hover:shadow-md transition-all flex flex-col justify-between ${gridClasses} ${bgClass}`}
-              >
-                <div>
-                  <div className={`w-14 h-14 border-2 border-current flex items-center justify-center mb-6 transition-colors ${iconBgClass}`}>
-                    <Icon className="w-6 h-6" />
+            {/* Ghost word */}
+            <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
+              <span className="text-[14vw] font-black uppercase tracking-tighter leading-none text-foreground/[0.03] whitespace-nowrap">
+                SERVICES
+              </span>
+            </div>
+
+            <div className="relative z-10">
+              {/* Label */}
+              <span className="inline-block bg-foreground text-background px-4 py-2 text-xs font-bold uppercase tracking-wider mb-6 border-2 border-foreground">
+                [ 01 / Core Capabilities ]
+              </span>
+
+              {/* Section headline */}
+              <h2 className="text-5xl md:text-6xl font-bold uppercase tracking-tighter leading-[0.9] mb-6">
+                What We <br />
+                <span className="font-serif italic lowercase font-normal text-primary">
+                  do
+                </span>
+              </h2>
+
+              {/* Divider */}
+              <div className="w-12 h-px bg-foreground/20 mb-8" />
+
+              {/* Active service detail — animated */}
+              {active && (
+                <div key={active.id} className="animate-fade-in">
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-11 h-11 border-2 border-foreground flex items-center justify-center bg-muted">
+                      <ActiveIcon className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground mb-0.5">
+                        0{activeIndex + 1} / {String(services.length).padStart(2, "0")}
+                      </p>
+                      <h3 className="text-2xl font-bold tracking-tight">
+                        {active.title}
+                      </h3>
+                    </div>
                   </div>
 
-                  <h3 className={`font-bold mb-3 ${index === 0 ? 'text-4xl' : 'text-2xl'}`}>
+                  <p className="text-muted-foreground leading-relaxed mb-8 text-base max-w-sm">
+                    {active.description}
+                  </p>
+
+                  <Link
+                    to="/services"
+                    className="inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-widest border-b-2 border-foreground pb-1 hover:text-primary hover:border-primary transition-colors group"
+                  >
+                    View All Services
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* ── RIGHT — scrollable service cards ── */}
+        <div className="lg:col-span-7 border-l border-border">
+          {services.map((service, i) => {
+            const Icon = ICON_MAP[service.icon] ?? CreditCard;
+            const isActive = i === activeIndex;
+
+            return (
+              <button
+                key={service.id}
+                onClick={() => setActiveIndex(i)}
+                className={`w-full text-left group border-b border-border flex flex-col sm:flex-row items-start gap-6 px-8 py-10 transition-colors duration-300 ${
+                  isActive
+                    ? "bg-foreground text-background"
+                    : "bg-background hover:bg-muted/40"
+                }`}
+              >
+                {/* Number + icon */}
+                <div className="flex items-center gap-4 shrink-0">
+                  <span
+                    className={`text-4xl font-black tabular-nums leading-none ${
+                      isActive ? "text-background/10" : "text-foreground/10"
+                    }`}
+                  >
+                    0{i + 1}
+                  </span>
+                  <div
+                    className={`w-10 h-10 border-2 flex items-center justify-center transition-colors ${
+                      isActive
+                        ? "border-background/40 text-background"
+                        : "border-foreground/20 text-foreground group-hover:border-foreground"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                  </div>
+                </div>
+
+                {/* Text */}
+                <div className="flex-1">
+                  <h3
+                    className={`text-xl font-bold tracking-tight mb-2 ${
+                      isActive ? "text-background" : ""
+                    }`}
+                  >
                     {service.title}
                   </h3>
-
-                  <p className={`opacity-80 line-clamp-3 ${index === 0 ? 'text-lg max-w-md' : 'text-sm'}`}>
+                  <p
+                    className={`text-sm leading-relaxed line-clamp-2 ${
+                      isActive ? "text-background/70" : "text-muted-foreground"
+                    }`}
+                  >
                     {service.description}
                   </p>
                 </div>
 
-                <Link
-                  to="/services"
-                  className="inline-flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-wider hover:gap-4 transition-all mt-6"
-                >
-                  Learn More <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
+                {/* Arrow */}
+                <ArrowRight
+                  className={`w-5 h-5 shrink-0 mt-1 transition-transform group-hover:translate-x-1 ${
+                    isActive ? "text-primary" : "text-foreground/20"
+                  }`}
+                />
+              </button>
             );
           })}
+
+          {/* Bottom CTA row */}
+          <div className="px-8 py-8 flex items-center justify-between border-t border-border bg-muted/20">
+            <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+              {services.length} services available
+            </span>
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 bg-foreground text-background px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-foreground/90 transition-colors"
+            >
+              All Services <ArrowRight className="w-3 h-3" />
+            </Link>
+          </div>
         </div>
+
       </div>
+
+      <style>{`
+        @keyframes fade-in {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+      `}</style>
     </section>
   );
 };
