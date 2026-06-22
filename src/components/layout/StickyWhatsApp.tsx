@@ -1,21 +1,23 @@
-import { MessageCircle } from "lucide-react";
+import WhatsAppIcon from "@/assets/whatsapp.svg";
 
 const StickyWhatsApp = () => {
-  const whatsappNumber = "919312699450"; // Use the same number as Contact page
-  const whatsappMessage = encodeURIComponent("Hi! I'm interested in your printing services. Can you help me with a quote?");
+  const phoneNumber = "+919471006334";
+  const message = "Hello, I would like to know more about your services.";
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <a
-        href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center w-16 h-16 bg-[#25D366] text-white rounded-full shadow-lg hover:scale-110 transition-transform duration-300 whatsapp-pulse border-2 border-foreground"
-        aria-label="Chat with us on WhatsApp"
-      >
-        <MessageCircle className="w-8 h-8" />
-      </a>
-    </div>
+    <a
+      href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="fixed bottom-6 left-6 z-50 transition hover:scale-110 bg-white rounded-full"
+      aria-label="Chat on WhatsApp"
+    >
+      <img
+        src="src/assets/whatsapp.svg"
+        alt="WhatsApp"
+        className="w-8 h-8"
+      />
+    </a>
   );
 };
 

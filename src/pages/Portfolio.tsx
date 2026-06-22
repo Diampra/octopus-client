@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight, X } from "lucide-react";
 import { apiUrl } from "@/constants/constants";
+import SEO from "@/components/SEO";
 
 type PortfolioItem = {
   id: string;
@@ -93,6 +94,11 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Portfolio - Octopus"
+        description="A curated archive of printing and design projects delivered with precision and bold creativity."
+        url="https://octopus.in/portfolio"
+      />
       <Header />
 
       <main className="pt-16 md:pt-20">
@@ -124,7 +130,7 @@ const Portfolio = () => {
           {/* Sticky Left — Filters */}
           <div className="hidden lg:block lg:col-span-3 xl:col-span-4 relative border-r border-border bg-foreground text-background">
             <div className="sticky top-[5rem] h-[calc(100vh-5rem)] flex flex-col justify-between p-8 xl:p-12 overflow-hidden">
-              
+
               {/* Ghost word */}
               <div className="absolute inset-0 flex items-center pointer-events-none select-none overflow-hidden">
                 <span className="text-[12vw] font-black uppercase tracking-tighter leading-none text-background/[0.02] whitespace-nowrap -rotate-90 translate-x-1/4">
@@ -140,11 +146,10 @@ const Portfolio = () => {
                       <button
                         key={c}
                         onClick={() => { setActiveCategory(c); setActiveIndex(0); }}
-                        className={`text-left font-mono text-sm font-bold uppercase tracking-widest transition-all group flex items-center gap-3 ${
-                          activeCategory === c
+                        className={`text-left font-mono text-sm font-bold uppercase tracking-widest transition-all group flex items-center gap-3 ${activeCategory === c
                             ? "text-primary translate-x-2"
                             : "text-background/50 hover:text-background hover:translate-x-1"
-                        }`}
+                          }`}
                       >
                         {activeCategory === c && <ArrowRight className="w-4 h-4" />}
                         {c}
@@ -164,7 +169,7 @@ const Portfolio = () => {
 
           {/* Scrollable Right — Grid */}
           <div className="lg:col-span-9 xl:col-span-8 bg-background">
-            
+
             {/* Mobile Filter Bar (Hidden on desktop) */}
             <div className="lg:hidden sticky top-16 z-30 bg-background/95 backdrop-blur-md border-b border-border">
               <div className="container mx-auto px-4 flex gap-6 overflow-x-auto py-4 scrollbar-hide">
@@ -172,11 +177,10 @@ const Portfolio = () => {
                   <button
                     key={c}
                     onClick={() => { setActiveCategory(c); setActiveIndex(0); }}
-                    className={`shrink-0 pb-1.5 text-xs font-bold font-mono uppercase tracking-widest transition-colors border-b-2 ${
-                      activeCategory === c
+                    className={`shrink-0 pb-1.5 text-xs font-bold font-mono uppercase tracking-widest transition-colors border-b-2 ${activeCategory === c
                         ? "border-primary text-primary"
                         : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
-                    }`}
+                      }`}
                   >
                     {c}
                   </button>
@@ -196,8 +200,8 @@ const Portfolio = () => {
                 <p className="text-muted-foreground text-sm">Try selecting a different category.</p>
               </div>
             ) : filteredItems.length > 2 ? (
-              <div 
-                className="overflow-hidden bg-border cursor-grab active:cursor-grabbing border-b border-border" 
+              <div
+                className="overflow-hidden bg-border cursor-grab active:cursor-grabbing border-b border-border"
                 ref={emblaRef}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
@@ -218,7 +222,7 @@ const Portfolio = () => {
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 pointer-events-none"
                         />
                         <div className="absolute inset-0 bg-foreground/20 group-hover:bg-foreground/10 transition-colors duration-500 pointer-events-none" />
-                        
+
                         {/* Hover Overlay Arrow */}
                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-foreground/20 backdrop-blur-[2px] pointer-events-none">
                           <div className="w-16 h-16 rounded-full bg-background flex items-center justify-center text-foreground scale-75 group-hover:scale-100 transition-transform duration-500 ease-out">
@@ -255,7 +259,7 @@ const Portfolio = () => {
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-foreground/20 group-hover:bg-foreground/10 transition-colors duration-500" />
-                      
+
                       {/* Hover Overlay Arrow */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 bg-foreground/20 backdrop-blur-[2px]">
                         <div className="w-16 h-16 rounded-full bg-background flex items-center justify-center text-foreground scale-75 group-hover:scale-100 transition-transform duration-500 ease-out">

@@ -6,6 +6,7 @@ import { ArrowRight, Target, Eye, Users, Award, Clock, Lightbulb } from "lucide-
 import heroBg from "@/assets/hero-bg.jpg";
 import brochures from "@/assets/brochures.jpg";
 import banners from "@/assets/banners.jpg";
+import SEO from "@/components/SEO";
 
 const values = [
   {
@@ -74,6 +75,11 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="About Us - Octopus"
+        description="Octopus Inc. is a leading printing and branding company based in Patna, Bihar. Your creative partner."
+        url="https://octopus.in/about"
+      />
       <Header />
 
       <main className="pt-16 md:pt-20">
@@ -203,11 +209,10 @@ const About = () => {
                         <button
                           key={i}
                           onClick={() => setActivePillar(i)}
-                          className={`transition-all duration-300 rounded-full ${
-                            i === activePillar
+                          className={`transition-all duration-300 rounded-full ${i === activePillar
                               ? "w-6 h-2 bg-primary"
                               : "w-2 h-2 bg-foreground/20 hover:bg-foreground/50"
-                          }`}
+                            }`}
                           aria-label={`View ${pillars[i].label}`}
                         />
                       ))}
@@ -226,9 +231,8 @@ const About = () => {
                   <div
                     key={pillar.id}
                     onClick={() => setActivePillar(i)}
-                    className={`group cursor-pointer border-b border-border transition-colors duration-300 ${
-                      isActive ? "bg-foreground text-background" : "hover:bg-muted/30"
-                    }`}
+                    className={`group cursor-pointer border-b border-border transition-colors duration-300 ${isActive ? "bg-foreground text-background" : "hover:bg-muted/30"
+                      }`}
                   >
                     <div className="flex items-stretch">
                       {/* Image thumbnail */}
@@ -244,14 +248,12 @@ const About = () => {
                       {/* Content */}
                       <div className="flex-1 px-6 md:px-10 py-10 flex flex-col justify-center">
                         <div className="flex items-center gap-3 mb-4">
-                          <div className={`w-9 h-9 border flex items-center justify-center transition-colors ${
-                            isActive ? "border-background/40 text-background" : "border-foreground/20"
-                          }`}>
+                          <div className={`w-9 h-9 border flex items-center justify-center transition-colors ${isActive ? "border-background/40 text-background" : "border-foreground/20"
+                            }`}>
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className={`font-mono text-[10px] uppercase tracking-widest ${
-                            isActive ? "text-background/50" : "text-muted-foreground"
-                          }`}>
+                          <span className={`font-mono text-[10px] uppercase tracking-widest ${isActive ? "text-background/50" : "text-muted-foreground"
+                            }`}>
                             0{i + 1}
                           </span>
                         </div>
@@ -259,9 +261,8 @@ const About = () => {
                         <h3 className="text-2xl font-bold tracking-tight uppercase leading-none mb-3">
                           {pillar.label}
                         </h3>
-                        <p className={`text-sm leading-relaxed line-clamp-2 ${
-                          isActive ? "text-background/70" : "text-muted-foreground"
-                        }`}>
+                        <p className={`text-sm leading-relaxed line-clamp-2 ${isActive ? "text-background/70" : "text-muted-foreground"
+                          }`}>
                           {pillar.body}
                         </p>
                       </div>

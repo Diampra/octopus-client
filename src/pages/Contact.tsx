@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { Phone, Mail, MapPin, MessageCircle, Clock, ArrowRight, Shield, CheckCircle } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const contactInfo = [
   {
@@ -43,15 +44,15 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     toast({
       title: "Message Sent!",
       description: "Thank you for contacting us. We'll get back to you within 24 hours.",
     });
-    
+
     setFormData({
       name: "",
       email: "",
@@ -67,6 +68,11 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Contact Us - Octopus"
+        description="Get in touch with Octopus for a free consultation and custom quote for your printing and branding projects."
+        url="https://octopus.in/contact"
+      />
       <Header />
 
       <main className="pt-16 md:pt-20">
@@ -232,9 +238,9 @@ const Contact = () => {
                       />
                     </div>
 
-                    <Button 
-                      type="submit" 
-                      disabled={isSubmitting} 
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
                       className="w-full h-14 bg-foreground text-background hover:bg-foreground/90 rounded-none uppercase font-bold tracking-widest text-xs group transition-all mt-4"
                     >
                       <span className="flex items-center justify-center gap-2">
@@ -242,7 +248,7 @@ const Contact = () => {
                         {!isSubmitting && <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />}
                       </span>
                     </Button>
-                    
+
                     <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-muted-foreground pt-2">
                       <Shield className="w-3 h-3" /> No spam. Custom quotes only.
                     </div>
@@ -250,7 +256,7 @@ const Contact = () => {
                 </div>
 
                 {/* WhatsApp block — Brutalist */}
-                <div 
+                <div
                   className="border-2 border-[#25D366] bg-[#25D366]/5 p-8 mb-12 cursor-pointer group hover:bg-[#25D366] transition-colors duration-300"
                   onClick={() => window.open(`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`, "_blank")}
                 >
@@ -271,7 +277,7 @@ const Contact = () => {
                     </div>
                   </div>
                 </div>
-                                
+
                 {/* Google Map — Sharp edges */}
                 <div className="border border-border h-[400px]">
                   <iframe

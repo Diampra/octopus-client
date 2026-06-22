@@ -36,16 +36,19 @@ import ScrollToTop from "./components/ScrollToTop";
 import StickyWhatsApp from "./components/layout/StickyWhatsApp";
 
 
+import { HelmetProvider } from "react-helmet-async";
+
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+  <HelmetProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
 
-      <ScrollToTop />
-      <Routes>
+        <ScrollToTop />
+        <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/services" element={<Services />} />
         <Route path="/portfolio" element={<Portfolio />} />
@@ -87,6 +90,7 @@ const App = () => (
       <StickyWhatsApp />
     </TooltipProvider>
   </QueryClientProvider>
+  </HelmetProvider>
 );
 
 export default App;

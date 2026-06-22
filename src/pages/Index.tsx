@@ -9,6 +9,8 @@ import TestimonialsSection from "@/components/home/TestimonialsSection";
 import CTASection from "@/components/home/CTASection";
 import { motion } from "framer-motion";
 
+import SEO from "@/components/SEO";
+
 const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
@@ -23,6 +25,10 @@ const FadeIn = ({ children, delay = 0 }: { children: React.ReactNode, delay?: nu
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title="Octopus - High-End Printing & Design Solutions"
+        description="Premium printing and creative design solutions that help your brand stand out."
+      />
       <Header />
       <main>
         <HeroSection />

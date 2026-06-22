@@ -23,7 +23,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background/95 backdrop-blur-md border-b border-border shadow-sm" : "bg-background border-b border-transparent"
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-background backdrop-blur-md border-b border-border shadow-sm" : "bg-background border-b border-transparent"
       }`}>
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -76,10 +76,10 @@ const Header = () => {
       </div>
 
       {/* Mobile Menu Overlay */}
-      <div className={`md:hidden fixed inset-0 bg-background z-40 transition-transform duration-500 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
+      <div className={`md:hidden fixed inset-0 z-40 transition-transform duration-500 ease-in-out ${isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}>
-        <div className="flex flex-col h-full pt-24 px-6 pb-12">
-          <nav className="flex flex-col gap-6 flex-1">
+        <div className="flex flex-col h-full pt-24 px-6 pb-12 bg-white">
+          <nav className="flex flex-col gap-6 flex-1 bg-white">
             <Link
               to="/"
               onClick={() => setIsMenuOpen(false)}

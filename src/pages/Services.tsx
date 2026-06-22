@@ -8,6 +8,7 @@ import { apiUrl } from "@/constants/constants";
 import {
   CreditCard, FileText, Presentation, Palette, Tag, Layers, Megaphone, Package,
 } from "lucide-react";
+import SEO from "@/components/SEO";
 
 const iconMap: Record<string, any> = {
   "credit-card": CreditCard,
@@ -94,6 +95,11 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Services - Octopus"
+        description="Explore our high-end printing and creative design services."
+        url="https://octopus.in/services"
+      />
       <Header />
 
       <main className="pt-16 md:pt-20">
@@ -202,8 +208,8 @@ export default function Services() {
                 ))}
               </div>
             ) : services.length > 2 ? (
-              <div 
-                className="overflow-hidden bg-border cursor-grab active:cursor-grabbing border-b border-border h-[calc(100vh-4rem-114px)]" 
+              <div
+                className="overflow-hidden bg-border cursor-grab active:cursor-grabbing border-b border-border h-[calc(100vh-4rem-114px)]"
                 ref={emblaRef}
                 onPointerDown={handlePointerDown}
                 onPointerMove={handlePointerMove}
@@ -217,9 +223,8 @@ export default function Services() {
                       <div
                         key={service.id}
                         onClick={() => handleCardClick(i)}
-                        className={`flex-[0_0_100%] sm:flex-[0_0_55%] xl:flex-[0_0_45%] min-w-0 group cursor-pointer transition-colors duration-300 bg-background flex flex-col ${
-                          isActive ? "bg-foreground text-background" : "hover:bg-muted/10"
-                        }`}
+                        className={`flex-[0_0_100%] sm:flex-[0_0_55%] xl:flex-[0_0_45%] min-w-0 group cursor-pointer transition-colors duration-300 bg-background flex flex-col ${isActive ? "bg-foreground text-background" : "hover:bg-muted/10"
+                          }`}
                       >
                         {/* Image thumbnail */}
                         <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden">
@@ -236,9 +241,8 @@ export default function Services() {
                         <div className="flex-1 p-8 flex flex-col justify-between border-t border-border pointer-events-none">
                           <div>
                             <div className="flex items-center gap-3 mb-4">
-                              <div className={`w-10 h-10 border flex items-center justify-center transition-colors ${
-                                isActive ? "border-background/40 text-background" : "border-foreground/20 text-foreground"
-                              }`}>
+                              <div className={`w-10 h-10 border flex items-center justify-center transition-colors ${isActive ? "border-background/40 text-background" : "border-foreground/20 text-foreground"
+                                }`}>
                                 <Icon className="w-4 h-4" />
                               </div>
                               <span className={`font-mono text-[10px] uppercase tracking-widest ${isActive ? "text-background/50" : "text-muted-foreground"}`}>
@@ -254,9 +258,8 @@ export default function Services() {
                           {/* Feature tags */}
                           <div className="flex flex-wrap gap-2 mt-8">
                             {service.features.slice(0, 3).map((f, fi) => (
-                              <span key={fi} className={`font-mono px-2 py-1 text-[9px] font-bold uppercase tracking-widest transition-colors ${
-                                isActive ? "bg-background/10 text-background" : "bg-muted text-muted-foreground"
-                              }`}>
+                              <span key={fi} className={`font-mono px-2 py-1 text-[9px] font-bold uppercase tracking-widest transition-colors ${isActive ? "bg-background/10 text-background" : "bg-muted text-muted-foreground"
+                                }`}>
                                 {f}
                               </span>
                             ))}
@@ -279,9 +282,8 @@ export default function Services() {
                       id={service.slug}
                       ref={(el) => { itemRefs.current[i] = el; }}
                       onClick={() => setActiveIndex(i)}
-                      className={`group cursor-pointer border-b border-border transition-colors duration-300 ${
-                        isActive ? "bg-foreground text-background" : "hover:bg-muted/30"
-                      }`}
+                      className={`group cursor-pointer border-b border-border transition-colors duration-300 ${isActive ? "bg-foreground text-background" : "hover:bg-muted/30"
+                        }`}
                     >
                       {/* Image + text row */}
                       <div className="flex items-stretch">
@@ -301,9 +303,8 @@ export default function Services() {
                           <div className="flex items-start justify-between gap-4">
                             <div>
                               <div className="flex items-center gap-3 mb-3">
-                                <div className={`w-8 h-8 border flex items-center justify-center transition-colors ${
-                                  isActive ? "border-background/40 text-background" : "border-foreground/20 text-foreground"
-                                }`}>
+                                <div className={`w-8 h-8 border flex items-center justify-center transition-colors ${isActive ? "border-background/40 text-background" : "border-foreground/20 text-foreground"
+                                  }`}>
                                   <Icon className="w-3.5 h-3.5" />
                                 </div>
                                 <span className={`font-mono text-[10px] uppercase tracking-widest ${isActive ? "text-background/50" : "text-muted-foreground"}`}>
@@ -321,9 +322,8 @@ export default function Services() {
                           {/* Feature tags */}
                           <div className="flex flex-wrap gap-1.5 mt-4">
                             {service.features.slice(0, 3).map((f, fi) => (
-                              <span key={fi} className={`font-mono px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest transition-colors ${
-                                isActive ? "bg-background/10 text-background" : "bg-muted text-muted-foreground"
-                              }`}>
+                              <span key={fi} className={`font-mono px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest transition-colors ${isActive ? "bg-background/10 text-background" : "bg-muted text-muted-foreground"
+                                }`}>
                                 {f}
                               </span>
                             ))}

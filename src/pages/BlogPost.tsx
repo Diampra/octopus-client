@@ -14,6 +14,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { apiUrl } from "@/constants/constants";
+import SEO from "@/components/SEO";
 
 type BlogPost = {
   id: string;
@@ -127,7 +128,7 @@ const BlogPostPage = () => {
   }, [slug]);
 
   if (loading) {
-  return <BlogPostSkeleton />;
+    return <BlogPostSkeleton />;
   }
 
   if (notFound || !post) {
@@ -135,8 +136,16 @@ const BlogPostPage = () => {
   }
   const shareUrl = encodeURIComponent(window.location.href);
   const shareText = encodeURIComponent(post?.title ?? "");
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={`${post.title} - Octopus Blog`}
+        description={post.excerpt}
+        url={`https://octopus.in/blog/${post.slug}`}
+        image={post.imageUrl || undefined}
+        type="article"
+      />
       <Header />
 
       <main className="pt-16 md:pt-20">
@@ -156,7 +165,7 @@ const BlogPostPage = () => {
                 <ArrowLeft className="w-4 h-4" />
                 Back
               </Link>
-              
+
               <span className="inline-block bg-primary text-primary-foreground px-4 py-2 text-xs font-bold uppercase tracking-wider border-2 border-background">
                 {post.category.name}
               </span>
@@ -260,16 +269,16 @@ const BlogPostPage = () => {
             {/* SIDEBAR */}
             <aside className="lg:col-span-4 bg-muted/30">
               <div className="sticky top-[5rem]">
-                
+
                 {/* CTA */}
                 <div className="p-8 md:p-12 border-b border-border bg-foreground text-background">
                   <h3 className="font-bold text-3xl uppercase tracking-tighter mb-4">
-                    Ready to <br/> <span className="text-primary italic font-serif lowercase font-normal">Start?</span>
+                    Ready to <br /> <span className="text-primary italic font-serif lowercase font-normal">Start?</span>
                   </h3>
                   <p className="text-background/70 mb-8 font-medium">
                     Let's bring your brand vision to life with our premium printing solutions.
                   </p>
-                  <Link 
+                  <Link
                     to="/contact"
                     className="inline-flex w-full items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-4 font-mono text-sm font-bold uppercase tracking-widest hover:bg-background hover:text-foreground transition-colors group"
                   >
